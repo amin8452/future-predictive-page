@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Shield, Play, CheckCircle, Zap } from "lucide-react";
+import { ArrowRight, Shield, Sparkles, CheckCircle, Zap, Brain } from "lucide-react";
 
 const LeadForm = () => {
   const [formData, setFormData] = useState({
@@ -23,14 +23,12 @@ const LeadForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulation d'envoi
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
-        title: "🎉 Portrait Prédictif en cours de génération !",
-        description: "Vous recevrez votre rapport personnalisé par email dans les 2-3 minutes.",
+        title: "🚀 Génération de votre Portrait Prédictif...",
+        description: "Votre rapport personnalisé sera livré dans votre boîte mail en moins de 2 minutes.",
       });
-      // Reset form
       setFormData({
         name: "",
         email: "",
@@ -46,32 +44,38 @@ const LeadForm = () => {
   };
 
   return (
-    <section id="lead-form" className="py-20 px-4 bg-black relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-red-600 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-red-800 rounded-full blur-3xl"></div>
+    <section id="lead-form" className="py-32 px-4 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full filter blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full filter blur-3xl"></div>
       </div>
       
-      <div className="container mx-auto max-w-4xl relative z-10">
-        <div className="bg-gray-900 rounded-2xl p-8 md:p-12 border border-gray-800">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-full text-sm font-bold mb-6">
-              <Zap className="w-4 h-4 mr-2" />
-              OFFRE GRATUITE LIMITÉE
+      <div className="container mx-auto max-w-5xl relative z-10">
+        <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600/30 to-pink-600/30 backdrop-blur-sm border border-purple-500/30 rounded-full text-sm font-bold text-purple-300 mb-8 shadow-lg">
+              <Brain className="w-5 h-5 mr-2 animate-pulse" />
+              IA NEXT-GEN • GRATUIT • INSTANTANÉ
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
-              Obtenez votre <span className="text-red-500">Portrait Prédictif</span> maintenant
+            
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
+              Générez votre{" "}
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Portrait Prédictif
+              </span>
             </h2>
-            <p className="text-xl text-gray-400 leading-relaxed">
-              Complétez ce formulaire intelligent pour recevoir votre analyse personnalisée de <span className="font-bold text-red-400">8-12 pages</span>
+            
+            <p className="text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
+              Complétez ce formulaire intelligent pour recevoir votre analyse prédictive personnalisée de{" "}
+              <span className="font-bold text-purple-400">12-15 pages</span>
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <Label htmlFor="name" className="text-lg font-semibold text-white">Nom complet *</Label>
+              <div className="space-y-4">
+                <Label htmlFor="name" className="text-lg font-semibold text-white">Nom complet</Label>
                 <Input
                   id="name"
                   type="text"
@@ -79,12 +83,12 @@ const LeadForm = () => {
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   placeholder="Jean Dupont"
                   required
-                  className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg transition-all duration-300"
+                  className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-purple-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
                 />
               </div>
               
-              <div className="space-y-3">
-                <Label htmlFor="email" className="text-lg font-semibold text-white">Email professionnel *</Label>
+              <div className="space-y-4">
+                <Label htmlFor="email" className="text-lg font-semibold text-white">Email professionnel</Label>
                 <Input
                   id="email"
                   type="email"
@@ -92,98 +96,96 @@ const LeadForm = () => {
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   placeholder="jean.dupont@entreprise.com"
                   required
-                  className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg transition-all duration-300"
+                  className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-purple-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
                 />
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <Label htmlFor="sector" className="text-lg font-semibold text-white">Secteur d'activité *</Label>
+              <div className="space-y-4">
+                <Label htmlFor="sector" className="text-lg font-semibold text-white">Secteur d'activité</Label>
                 <Select value={formData.sector} onValueChange={(value) => handleInputChange("sector", value)}>
-                  <SelectTrigger className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg">
+                  <SelectTrigger className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white focus:border-purple-400 rounded-2xl">
                     <SelectValue placeholder="Sélectionnez votre secteur" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-700">
-                    <SelectItem value="tech" className="text-white hover:bg-gray-700">Technologie / IT</SelectItem>
-                    <SelectItem value="finance" className="text-white hover:bg-gray-700">Finance / Banque</SelectItem>
-                    <SelectItem value="industrie" className="text-white hover:bg-gray-700">Industrie / Manufacturing</SelectItem>
-                    <SelectItem value="sante" className="text-white hover:bg-gray-700">Santé / Médical</SelectItem>
-                    <SelectItem value="commerce" className="text-white hover:bg-gray-700">Commerce / Retail</SelectItem>
-                    <SelectItem value="consulting" className="text-white hover:bg-gray-700">Conseil / Services</SelectItem>
-                    <SelectItem value="media" className="text-white hover:bg-gray-700">Média / Communication</SelectItem>
-                    <SelectItem value="autre" className="text-white hover:bg-gray-700">Autre</SelectItem>
+                  <SelectContent className="bg-slate-800/95 backdrop-blur-xl border border-white/20 rounded-2xl">
+                    <SelectItem value="tech" className="text-white hover:bg-white/10 rounded-xl">Technologie / IA</SelectItem>
+                    <SelectItem value="finance" className="text-white hover:bg-white/10 rounded-xl">Finance / FinTech</SelectItem>
+                    <SelectItem value="industrie" className="text-white hover:bg-white/10 rounded-xl">Industrie 4.0</SelectItem>
+                    <SelectItem value="sante" className="text-white hover:bg-white/10 rounded-xl">Santé / MedTech</SelectItem>
+                    <SelectItem value="commerce" className="text-white hover:bg-white/10 rounded-xl">E-commerce / Retail</SelectItem>
+                    <SelectItem value="consulting" className="text-white hover:bg-white/10 rounded-xl">Conseil / Services</SelectItem>
+                    <SelectItem value="media" className="text-white hover:bg-white/10 rounded-xl">Média / Communication</SelectItem>
+                    <SelectItem value="autre" className="text-white hover:bg-white/10 rounded-xl">Autre</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               
-              <div className="space-y-3">
-                <Label htmlFor="position" className="text-lg font-semibold text-white">Votre poste actuel *</Label>
+              <div className="space-y-4">
+                <Label htmlFor="position" className="text-lg font-semibold text-white">Poste actuel</Label>
                 <Select value={formData.position} onValueChange={(value) => handleInputChange("position", value)}>
-                  <SelectTrigger className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg">
+                  <SelectTrigger className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white focus:border-purple-400 rounded-2xl">
                     <SelectValue placeholder="Sélectionnez votre poste" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-700">
-                    <SelectItem value="ceo" className="text-white hover:bg-gray-700">CEO / Dirigeant</SelectItem>
-                    <SelectItem value="cto" className="text-white hover:bg-gray-700">CTO / Directeur Technique</SelectItem>
-                    <SelectItem value="cmo" className="text-white hover:bg-gray-700">CMO / Directeur Marketing</SelectItem>
-                    <SelectItem value="manager" className="text-white hover:bg-gray-700">Manager / Chef d'équipe</SelectItem>
-                    <SelectItem value="consultant" className="text-white hover:bg-gray-700">Consultant</SelectItem>
-                    <SelectItem value="entrepreneur" className="text-white hover:bg-gray-700">Entrepreneur</SelectItem>
-                    <SelectItem value="autre" className="text-white hover:bg-gray-700">Autre</SelectItem>
+                  <SelectContent className="bg-slate-800/95 backdrop-blur-xl border border-white/20 rounded-2xl">
+                    <SelectItem value="ceo" className="text-white hover:bg-white/10 rounded-xl">CEO / Fondateur</SelectItem>
+                    <SelectItem value="cto" className="text-white hover:bg-white/10 rounded-xl">CTO / Chief Technology Officer</SelectItem>
+                    <SelectItem value="cmo" className="text-white hover:bg-white/10 rounded-xl">CMO / Chief Marketing Officer</SelectItem>
+                    <SelectItem value="manager" className="text-white hover:bg-white/10 rounded-xl">VP / Director</SelectItem>
+                    <SelectItem value="consultant" className="text-white hover:bg-white/10 rounded-xl">Consultant Senior</SelectItem>
+                    <SelectItem value="entrepreneur" className="text-white hover:bg-white/10 rounded-xl">Entrepreneur</SelectItem>
+                    <SelectItem value="autre" className="text-white hover:bg-white/10 rounded-xl">Autre</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="space-y-3">
-              <Label htmlFor="ambitions" className="text-lg font-semibold text-white">Vos ambitions professionnelles à 3 ans</Label>
+            <div className="space-y-4">
+              <Label htmlFor="ambitions" className="text-lg font-semibold text-white">Vision stratégique à 3 ans</Label>
               <Textarea
                 id="ambitions"
                 value={formData.ambitions}
                 onChange={(e) => handleInputChange("ambitions", e.target.value)}
-                placeholder="Décrivez vos objectifs, projets de développement, ou défis que vous souhaitez relever..."
-                className="min-h-[120px] text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg transition-all duration-300"
+                placeholder="Décrivez vos objectifs stratégiques, projets d'innovation, ou défis de transformation que vous souhaitez relever..."
+                className="min-h-[140px] text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-purple-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
               />
             </div>
 
-            <div className="flex items-center space-x-3 text-gray-400 bg-gray-800 p-4 rounded-lg">
-              <Shield className="w-5 h-5 text-green-500" />
-              <span className="font-medium">Vos données sont protégées et ne seront jamais partagées (RGPD)</span>
+            <div className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+              <Shield className="w-6 h-6 text-green-400 flex-shrink-0" />
+              <span className="text-slate-300 font-medium">Vos données sont cryptées et protégées selon les standards RGPD les plus stricts</span>
             </div>
 
             <Button
               type="submit"
               disabled={isSubmitting || !formData.name || !formData.email || !formData.sector || !formData.position}
-              className="w-full bg-red-600 hover:bg-red-700 text-white h-16 text-xl font-bold rounded-lg transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-20 text-xl font-bold rounded-2xl shadow-2xl transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-purple-500/25"
             >
               {isSubmitting ? (
                 <div className="flex items-center">
                   <Zap className="mr-3 h-6 w-6 animate-spin" />
-                  Génération de votre rapport...
+                  Génération par IA en cours...
                 </div>
               ) : (
                 <div className="flex items-center">
-                  <Play className="mr-3 h-6 w-6 fill-current" />
-                  Générer mon Portrait Prédictif
+                  <Sparkles className="mr-3 h-6 w-6" />
+                  Générer mon Portrait Prédictif IA
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </div>
               )}
             </Button>
 
-            <div className="grid md:grid-cols-3 gap-4 pt-4">
-              <div className="flex items-center text-green-400">
-                <CheckCircle className="w-5 h-5 mr-2" />
-                <span className="font-semibold">100% Gratuit</span>
-              </div>
-              <div className="flex items-center text-green-400">
-                <CheckCircle className="w-5 h-5 mr-2" />
-                <span className="font-semibold">Livraison instantanée</span>
-              </div>
-              <div className="flex items-center text-green-400">
-                <CheckCircle className="w-5 h-5 mr-2" />
-                <span className="font-semibold">Rapport premium</span>
-              </div>
+            <div className="grid md:grid-cols-3 gap-6 pt-6">
+              {[
+                { icon: CheckCircle, text: "100% Gratuit", color: "text-green-400" },
+                { icon: Zap, text: "Livraison <2min", color: "text-yellow-400" },
+                { icon: Shield, text: "Données sécurisées", color: "text-blue-400" }
+              ].map((item, index) => (
+                <div key={index} className="flex items-center justify-center text-center">
+                  <item.icon className={`w-5 h-5 mr-2 ${item.color}`} />
+                  <span className="font-semibold text-white">{item.text}</span>
+                </div>
+              ))}
             </div>
           </form>
         </div>
