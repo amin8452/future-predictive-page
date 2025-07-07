@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Shield, Sparkles, Zap, Gift } from "lucide-react";
+import { ArrowRight, Shield, Play, CheckCircle, Zap } from "lucide-react";
 
 const LeadForm = () => {
   const [formData, setFormData] = useState({
@@ -46,32 +46,32 @@ const LeadForm = () => {
   };
 
   return (
-    <section id="lead-form" className="py-24 px-4 bg-gradient-to-br from-indigo-600 via-purple-700 to-blue-800 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-white/5 to-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-purple-400/10 to-white/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <section id="lead-form" className="py-20 px-4 bg-black relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-red-600 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-red-800 rounded-full blur-3xl"></div>
       </div>
       
-      <div className="container mx-auto max-w-5xl relative z-10">
-        <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-12 border border-white/20">
+      <div className="container mx-auto max-w-4xl relative z-10">
+        <div className="bg-gray-900 rounded-2xl p-8 md:p-12 border border-gray-800">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 rounded-full text-sm font-semibold mb-6">
-              <Gift className="w-4 h-4 mr-2" />
-              Offre gratuite limitée
+            <div className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-full text-sm font-bold mb-6">
+              <Zap className="w-4 h-4 mr-2" />
+              OFFRE GRATUITE LIMITÉE
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 leading-tight">
-              Obtenez votre <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Portrait Prédictif</span> maintenant
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+              Obtenez votre <span className="text-red-500">Portrait Prédictif</span> maintenant
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              Complétez ce formulaire intelligent pour recevoir votre analyse personnalisée de <span className="font-bold text-blue-600">8-12 pages</span>
+            <p className="text-xl text-gray-400 leading-relaxed">
+              Complétez ce formulaire intelligent pour recevoir votre analyse personnalisée de <span className="font-bold text-red-400">8-12 pages</span>
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-3">
-                <Label htmlFor="name" className="text-lg font-semibold text-gray-800">Nom complet *</Label>
+                <Label htmlFor="name" className="text-lg font-semibold text-white">Nom complet *</Label>
                 <Input
                   id="name"
                   type="text"
@@ -79,12 +79,12 @@ const LeadForm = () => {
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   placeholder="Jean Dupont"
                   required
-                  className="h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl transition-all duration-300"
+                  className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg transition-all duration-300"
                 />
               </div>
               
               <div className="space-y-3">
-                <Label htmlFor="email" className="text-lg font-semibold text-gray-800">Email professionnel *</Label>
+                <Label htmlFor="email" className="text-lg font-semibold text-white">Email professionnel *</Label>
                 <Input
                   id="email"
                   type="email"
@@ -92,84 +92,99 @@ const LeadForm = () => {
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   placeholder="jean.dupont@entreprise.com"
                   required
-                  className="h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl transition-all duration-300"
+                  className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg transition-all duration-300"
                 />
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-3">
-                <Label htmlFor="sector" className="text-lg font-semibold text-gray-800">Secteur d'activité *</Label>
+                <Label htmlFor="sector" className="text-lg font-semibold text-white">Secteur d'activité *</Label>
                 <Select value={formData.sector} onValueChange={(value) => handleInputChange("sector", value)}>
-                  <SelectTrigger className="h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl">
+                  <SelectTrigger className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg">
                     <SelectValue placeholder="Sélectionnez votre secteur" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="tech">Technologie / IT</SelectItem>
-                    <SelectItem value="finance">Finance / Banque</SelectItem>
-                    <SelectItem value="industrie">Industrie / Manufacturing</SelectItem>
-                    <SelectItem value="sante">Santé / Médical</SelectItem>
-                    <SelectItem value="commerce">Commerce / Retail</SelectItem>
-                    <SelectItem value="consulting">Conseil / Services</SelectItem>
-                    <SelectItem value="media">Média / Communication</SelectItem>
-                    <SelectItem value="autre">Autre</SelectItem>
+                  <SelectContent className="bg-gray-800 border-gray-700">
+                    <SelectItem value="tech" className="text-white hover:bg-gray-700">Technologie / IT</SelectItem>
+                    <SelectItem value="finance" className="text-white hover:bg-gray-700">Finance / Banque</SelectItem>
+                    <SelectItem value="industrie" className="text-white hover:bg-gray-700">Industrie / Manufacturing</SelectItem>
+                    <SelectItem value="sante" className="text-white hover:bg-gray-700">Santé / Médical</SelectItem>
+                    <SelectItem value="commerce" className="text-white hover:bg-gray-700">Commerce / Retail</SelectItem>
+                    <SelectItem value="consulting" className="text-white hover:bg-gray-700">Conseil / Services</SelectItem>
+                    <SelectItem value="media" className="text-white hover:bg-gray-700">Média / Communication</SelectItem>
+                    <SelectItem value="autre" className="text-white hover:bg-gray-700">Autre</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               
               <div className="space-y-3">
-                <Label htmlFor="position" className="text-lg font-semibold text-gray-800">Votre poste actuel *</Label>
+                <Label htmlFor="position" className="text-lg font-semibold text-white">Votre poste actuel *</Label>
                 <Select value={formData.position} onValueChange={(value) => handleInputChange("position", value)}>
-                  <SelectTrigger className="h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl">
+                  <SelectTrigger className="h-14 text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg">
                     <SelectValue placeholder="Sélectionnez votre poste" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ceo">CEO / Dirigeant</SelectItem>
-                    <SelectItem value="cto">CTO / Directeur Technique</SelectItem>
-                    <SelectItem value="cmo">CMO / Directeur Marketing</SelectItem>
-                    <SelectItem value="manager">Manager / Chef d'équipe</SelectItem>
-                    <SelectItem value="consultant">Consultant</SelectItem>
-                    <SelectItem value="entrepreneur">Entrepreneur</SelectItem>
-                    <SelectItem value="autre">Autre</SelectItem>
+                  <SelectContent className="bg-gray-800 border-gray-700">
+                    <SelectItem value="ceo" className="text-white hover:bg-gray-700">CEO / Dirigeant</SelectItem>
+                    <SelectItem value="cto" className="text-white hover:bg-gray-700">CTO / Directeur Technique</SelectItem>
+                    <SelectItem value="cmo" className="text-white hover:bg-gray-700">CMO / Directeur Marketing</SelectItem>
+                    <SelectItem value="manager" className="text-white hover:bg-gray-700">Manager / Chef d'équipe</SelectItem>
+                    <SelectItem value="consultant" className="text-white hover:bg-gray-700">Consultant</SelectItem>
+                    <SelectItem value="entrepreneur" className="text-white hover:bg-gray-700">Entrepreneur</SelectItem>
+                    <SelectItem value="autre" className="text-white hover:bg-gray-700">Autre</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div className="space-y-3">
-              <Label htmlFor="ambitions" className="text-lg font-semibold text-gray-800">Vos ambitions professionnelles à 3 ans</Label>
+              <Label htmlFor="ambitions" className="text-lg font-semibold text-white">Vos ambitions professionnelles à 3 ans</Label>
               <Textarea
                 id="ambitions"
                 value={formData.ambitions}
                 onChange={(e) => handleInputChange("ambitions", e.target.value)}
                 placeholder="Décrivez vos objectifs, projets de développement, ou défis que vous souhaitez relever..."
-                className="min-h-[120px] text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl transition-all duration-300"
+                className="min-h-[120px] text-lg bg-gray-800 border-gray-700 text-white focus:border-red-500 rounded-lg transition-all duration-300"
               />
             </div>
 
-            <div className="flex items-center space-x-3 text-gray-600 bg-gray-50 p-4 rounded-xl">
-              <Shield className="w-5 h-5 text-green-600" />
+            <div className="flex items-center space-x-3 text-gray-400 bg-gray-800 p-4 rounded-lg">
+              <Shield className="w-5 h-5 text-green-500" />
               <span className="font-medium">Vos données sont protégées et ne seront jamais partagées (RGPD)</span>
             </div>
 
             <Button
               type="submit"
               disabled={isSubmitting || !formData.name || !formData.email || !formData.sector || !formData.position}
-              className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 text-white h-16 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-red-600 hover:bg-red-700 text-white h-16 text-xl font-bold rounded-lg transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <div className="flex items-center">
                   <Zap className="mr-3 h-6 w-6 animate-spin" />
-                  Génération en cours...
+                  Génération de votre rapport...
                 </div>
               ) : (
                 <div className="flex items-center">
-                  <Sparkles className="mr-3 h-6 w-6" />
+                  <Play className="mr-3 h-6 w-6 fill-current" />
                   Générer mon Portrait Prédictif
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </div>
               )}
             </Button>
+
+            <div className="grid md:grid-cols-3 gap-4 pt-4">
+              <div className="flex items-center text-green-400">
+                <CheckCircle className="w-5 h-5 mr-2" />
+                <span className="font-semibold">100% Gratuit</span>
+              </div>
+              <div className="flex items-center text-green-400">
+                <CheckCircle className="w-5 h-5 mr-2" />
+                <span className="font-semibold">Livraison instantanée</span>
+              </div>
+              <div className="flex items-center text-green-400">
+                <CheckCircle className="w-5 h-5 mr-2" />
+                <span className="font-semibold">Rapport premium</span>
+              </div>
+            </div>
           </form>
         </div>
       </div>

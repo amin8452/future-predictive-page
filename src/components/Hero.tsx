@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Zap, TrendingUp } from "lucide-react";
+import { ArrowRight, Play, Info, Star } from "lucide-react";
 
 const Hero = () => {
   const scrollToForm = () => {
@@ -8,72 +8,76 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative overflow-hidden py-24 px-4 bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-indigo-100/30 to-purple-100/30 rounded-full blur-3xl"></div>
-      </div>
+    <section className="relative min-h-screen bg-black overflow-hidden">
+      {/* Background Video Effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50 z-10"></div>
       
-      <div className="container mx-auto max-w-7xl relative z-10">
-        <div className="text-center space-y-8 animate-fade-in">
+      {/* Background Image with Overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1551434678-e076c223a692?w=1920&h=1080&fit=crop&q=80')`,
+          filter: 'brightness(0.3) saturate(1.2)'
+        }}
+      ></div>
+      
+      <div className="relative z-20 container mx-auto px-4 flex items-center min-h-screen">
+        <div className="max-w-2xl space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-200/50 text-blue-700 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-            <Sparkles className="w-5 h-5 mr-2 text-yellow-500" />
-            Alimenté par l'Intelligence Artificielle
-            <Zap className="w-4 h-4 ml-2 text-purple-500" />
+          <div className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded text-sm font-bold">
+            <Star className="w-4 h-4 mr-2 fill-current" />
+            NOUVEAU : ALIMENTÉ PAR L'IA
           </div>
           
           {/* Main Title */}
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-gray-900 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-black text-white leading-tight">
             Découvrez votre{" "}
-            <span className="relative">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 animate-pulse">
-                futur professionnel
-              </span>
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 rounded-full"></div>
+            <span className="text-red-500">
+              futur professionnel
             </span>
-            {" "}grâce à l'IA
           </h1>
           
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-medium">
-            Un rapport <span className="font-bold text-blue-600">gratuit et personnalisé</span> qui analyse votre secteur, identifie vos leviers de croissance, 
-            et vous propose une feuille de route stratégique en <span className="font-bold text-purple-600">moins de 60 secondes</span>.
+          <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-medium">
+            Un rapport gratuit et personnalisé qui analyse votre secteur, identifie vos leviers de croissance, 
+            et vous propose une stratégie en moins de 60 secondes.
           </p>
           
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 py-6">
-            <div className="flex items-center space-x-2 text-gray-600">
-              <TrendingUp className="w-5 h-5 text-green-500" />
-              <span className="font-semibold">2,500+ dirigeants</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600">
-              <Sparkles className="w-5 h-5 text-yellow-500" />
-              <span className="font-semibold">94% de satisfaction</span>
-            </div>
-            <div className="flex items-center space-x-2 text-gray-600">
-              <Zap className="w-5 h-5 text-purple-500" />
-              <span className="font-semibold">Analyse instantanée</span>
-            </div>
+          <div className="flex items-center space-x-6 text-gray-400">
+            <span className="flex items-center">
+              <Star className="w-4 h-4 text-yellow-500 mr-1 fill-current" />
+              94% satisfaction
+            </span>
+            <span>•</span>
+            <span>2,500+ dirigeants</span>
+            <span>•</span>
+            <span className="text-green-400 font-semibold">Analyse instantanée</span>
           </div>
           
-          {/* CTA */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-4">
+          {/* CTA Buttons */}
+          <div className="flex items-center space-x-4 pt-4">
             <Button 
               onClick={scrollToForm}
               size="lg" 
-              className="group bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 hover:from-blue-700 hover:via-purple-700 hover:to-cyan-700 text-white px-10 py-6 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 border-0"
+              className="bg-white text-black hover:bg-gray-200 px-8 py-4 text-lg font-bold rounded-md transition-all duration-300 transform hover:scale-105"
             >
-              <Sparkles className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform duration-300" />
-              Obtenez votre Portrait Prédictif
-              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform duration-300" />
+              <Play className="mr-2 h-5 w-5 fill-current" />
+              Commencer l'analyse
             </Button>
-            <div className="flex flex-col items-center space-y-2">
-              <p className="text-sm text-gray-500 font-medium">✨ Gratuit & Instantané</p>
-              <p className="text-sm text-gray-500 font-medium">📄 PDF Premium de 8-12 pages</p>
-            </div>
+            <Button 
+              variant="outline"
+              size="lg" 
+              className="border-2 border-gray-600 text-white hover:border-white hover:bg-white/10 px-8 py-4 text-lg font-semibold rounded-md transition-all duration-300"
+            >
+              <Info className="mr-2 h-5 w-5" />
+              Plus d'infos
+            </Button>
+          </div>
+          
+          <div className="text-sm text-gray-500">
+            ✨ Gratuit • 📄 PDF Premium • 🚀 Instantané
           </div>
         </div>
       </div>
