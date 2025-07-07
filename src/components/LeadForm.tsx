@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Shield, Sparkles, CheckCircle, Zap, Brain } from "lucide-react";
+import { ArrowRight, Shield, Sparkles, CheckCircle, Zap, Brain, Download } from "lucide-react";
+import { PdfService } from "@/services/PdfService";
 
 const LeadForm = () => {
   const [formData, setFormData] = useState({
@@ -23,20 +24,43 @@ const LeadForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      console.log('Starting PDF generation process...');
+      
+      // Use mock PDF generation for demo
+      const result = await PdfService.generateMockPdf(formData);
+      
+      if (result.success) {
+        toast({
+          title: "🚀 Portrait Prédictif Généré!",
+          description: result.message,
+        });
+        
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          sector: "",
+          position: "",
+          ambitions: ""
+        });
+      } else {
+        toast({
+          title: "❌ Erreur de génération",
+          description: result.error || "Une erreur est survenue lors de la génération du PDF.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('PDF generation error:', error);
       toast({
-        title: "🚀 Génération de votre Portrait Prédictif...",
-        description: "Votre rapport personnalisé sera livré dans votre boîte mail en moins de 2 minutes.",
+        title: "❌ Erreur technique",
+        description: "Une erreur technique est survenue. Veuillez réessayer.",
+        variant: "destructive",
       });
-      setFormData({
-        name: "",
-        email: "",
-        sector: "",
-        position: "",
-        ambitions: ""
-      });
-    }, 2000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -44,31 +68,31 @@ const LeadForm = () => {
   };
 
   return (
-    <section id="lead-form" className="py-32 px-4 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 relative overflow-hidden">
+    <section id="lead-form" className="py-32 px-4 bg-gradient-to-br from-slate-950 via-indigo-950/30 to-slate-950 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full filter blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full filter blur-3xl"></div>
+        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
       </div>
       
       <div className="container mx-auto max-w-5xl relative z-10">
         <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600/30 to-pink-600/30 backdrop-blur-sm border border-purple-500/30 rounded-full text-sm font-bold text-purple-300 mb-8 shadow-lg">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-600/30 to-blue-600/30 backdrop-blur-sm border border-cyan-500/30 rounded-full text-sm font-bold text-cyan-300 mb-8 shadow-lg">
               <Brain className="w-5 h-5 mr-2 animate-pulse" />
-              IA NEXT-GEN • GRATUIT • INSTANTANÉ
+              IA PRÉDICTIVE • GRATUIT • PDF PREMIUM
             </div>
             
             <h2 className="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
               Générez votre{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Portrait Prédictif
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                Portrait Prédictif IA
               </span>
             </h2>
             
             <p className="text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
-              Complétez ce formulaire intelligent pour recevoir votre analyse prédictive personnalisée de{" "}
-              <span className="font-bold text-purple-400">12-15 pages</span>
+              Complétez ce formulaire pour recevoir votre analyse prédictive personnalisée de{" "}
+              <span className="font-bold text-cyan-400">12-15 pages</span> par email
             </p>
           </div>
 
@@ -83,7 +107,7 @@ const LeadForm = () => {
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   placeholder="Jean Dupont"
                   required
-                  className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-purple-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
+                  className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
                 />
               </div>
               
@@ -96,7 +120,7 @@ const LeadForm = () => {
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   placeholder="jean.dupont@entreprise.com"
                   required
-                  className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-purple-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
+                  className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
                 />
               </div>
             </div>
@@ -105,7 +129,7 @@ const LeadForm = () => {
               <div className="space-y-4">
                 <Label htmlFor="sector" className="text-lg font-semibold text-white">Secteur d'activité</Label>
                 <Select value={formData.sector} onValueChange={(value) => handleInputChange("sector", value)}>
-                  <SelectTrigger className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white focus:border-purple-400 rounded-2xl">
+                  <SelectTrigger className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white focus:border-cyan-400 rounded-2xl">
                     <SelectValue placeholder="Sélectionnez votre secteur" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-800/95 backdrop-blur-xl border border-white/20 rounded-2xl">
@@ -124,7 +148,7 @@ const LeadForm = () => {
               <div className="space-y-4">
                 <Label htmlFor="position" className="text-lg font-semibold text-white">Poste actuel</Label>
                 <Select value={formData.position} onValueChange={(value) => handleInputChange("position", value)}>
-                  <SelectTrigger className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white focus:border-purple-400 rounded-2xl">
+                  <SelectTrigger className="h-16 text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white focus:border-cyan-400 rounded-2xl">
                     <SelectValue placeholder="Sélectionnez votre poste" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-800/95 backdrop-blur-xl border border-white/20 rounded-2xl">
@@ -147,29 +171,29 @@ const LeadForm = () => {
                 value={formData.ambitions}
                 onChange={(e) => handleInputChange("ambitions", e.target.value)}
                 placeholder="Décrivez vos objectifs stratégiques, projets d'innovation, ou défis de transformation que vous souhaitez relever..."
-                className="min-h-[140px] text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-purple-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
+                className="min-h-[140px] text-lg bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-slate-400 focus:border-cyan-400 focus:bg-white/10 rounded-2xl transition-all duration-300"
               />
             </div>
 
             <div className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <Shield className="w-6 h-6 text-green-400 flex-shrink-0" />
+              <Shield className="w-6 h-6 text-emerald-400 flex-shrink-0" />
               <span className="text-slate-300 font-medium">Vos données sont cryptées et protégées selon les standards RGPD les plus stricts</span>
             </div>
 
             <Button
               type="submit"
               disabled={isSubmitting || !formData.name || !formData.email || !formData.sector || !formData.position}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white h-20 text-xl font-bold rounded-2xl shadow-2xl transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-purple-500/25"
+              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white h-20 text-xl font-bold rounded-2xl shadow-2xl transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-cyan-500/25"
             >
               {isSubmitting ? (
                 <div className="flex items-center">
                   <Zap className="mr-3 h-6 w-6 animate-spin" />
-                  Génération par IA en cours...
+                  Génération IA en cours...
                 </div>
               ) : (
                 <div className="flex items-center">
-                  <Sparkles className="mr-3 h-6 w-6" />
-                  Générer mon Portrait Prédictif IA
+                  <Download className="mr-3 h-6 w-6" />
+                  Générer mon Portrait Prédictif PDF
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </div>
               )}
@@ -177,9 +201,9 @@ const LeadForm = () => {
 
             <div className="grid md:grid-cols-3 gap-6 pt-6">
               {[
-                { icon: CheckCircle, text: "100% Gratuit", color: "text-green-400" },
+                { icon: CheckCircle, text: "100% Gratuit", color: "text-emerald-400" },
                 { icon: Zap, text: "Livraison <2min", color: "text-yellow-400" },
-                { icon: Shield, text: "Données sécurisées", color: "text-blue-400" }
+                { icon: Shield, text: "Données sécurisées", color: "text-cyan-400" }
               ].map((item, index) => (
                 <div key={index} className="flex items-center justify-center text-center">
                   <item.icon className={`w-5 h-5 mr-2 ${item.color}`} />
