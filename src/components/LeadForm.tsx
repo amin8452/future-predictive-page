@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Shield, Sparkles, CheckCircle, Zap, Brain, Download } from "lucide-react";
+import { ArrowRight, Shield, Sparkles, CheckCircle, Zap, Brain, Download, Bot } from "lucide-react";
 import { PdfService } from "@/services/PdfService";
 
 const LeadForm = () => {
@@ -25,14 +25,14 @@ const LeadForm = () => {
     setIsSubmitting(true);
     
     try {
-      console.log('Starting PDF generation process...');
+      console.log('Starting AI-powered PDF generation with Deepseek v3...');
       
-      // Use mock PDF generation for demo
-      const result = await PdfService.generateMockPdf(formData);
+      // Use the enhanced AI-powered PDF service
+      const result = await PdfService.sendPdfByEmail(formData);
       
       if (result.success) {
         toast({
-          title: "🚀 Portrait Prédictif Généré!",
+          title: "🤖 Portrait Prédictif IA Généré!",
           description: result.message,
         });
         
@@ -46,16 +46,16 @@ const LeadForm = () => {
         });
       } else {
         toast({
-          title: "❌ Erreur de génération",
-          description: result.error || "Une erreur est survenue lors de la génération du PDF.",
+          title: "❌ Erreur de génération IA",
+          description: result.error || "Une erreur est survenue lors de la génération du PDF avec l'IA.",
           variant: "destructive",
         });
       }
     } catch (error) {
-      console.error('PDF generation error:', error);
+      console.error('AI PDF generation error:', error);
       toast({
         title: "❌ Erreur technique",
-        description: "Une erreur technique est survenue. Veuillez réessayer.",
+        description: "Une erreur technique est survenue avec l'IA Deepseek v3. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
@@ -79,8 +79,8 @@ const LeadForm = () => {
         <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-600/30 to-blue-600/30 backdrop-blur-sm border border-cyan-500/30 rounded-full text-sm font-bold text-cyan-300 mb-8 shadow-lg">
-              <Brain className="w-5 h-5 mr-2 animate-pulse" />
-              IA PRÉDICTIVE • GRATUIT • PDF PREMIUM
+              <Bot className="w-5 h-5 mr-2 animate-pulse" />
+              DEEPSEEK V3 • IA PRÉDICTIVE • PDF PREMIUM
             </div>
             
             <h2 className="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
@@ -92,7 +92,7 @@ const LeadForm = () => {
             
             <p className="text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
               Complétez ce formulaire pour recevoir votre analyse prédictive personnalisée de{" "}
-              <span className="font-bold text-cyan-400">12-15 pages</span> par email
+              <span className="font-bold text-cyan-400">12-15 pages</span> générée par l'IA Deepseek v3
             </p>
           </div>
 
@@ -177,7 +177,7 @@ const LeadForm = () => {
 
             <div className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
               <Shield className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-              <span className="text-slate-300 font-medium">Vos données sont cryptées et protégées selon les standards RGPD les plus stricts</span>
+              <span className="text-slate-300 font-medium">Vos données sont cryptées et protégées. L'IA Deepseek v3 génère un contenu 100% personnalisé</span>
             </div>
 
             <Button
@@ -187,13 +187,13 @@ const LeadForm = () => {
             >
               {isSubmitting ? (
                 <div className="flex items-center">
-                  <Zap className="mr-3 h-6 w-6 animate-spin" />
-                  Génération IA en cours...
+                  <Bot className="mr-3 h-6 w-6 animate-spin" />
+                  IA Deepseek v3 en cours de génération...
                 </div>
               ) : (
                 <div className="flex items-center">
-                  <Download className="mr-3 h-6 w-6" />
-                  Générer mon Portrait Prédictif PDF
+                  <Bot className="mr-3 h-6 w-6" />
+                  Générer avec l'IA Deepseek v3
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </div>
               )}
@@ -201,9 +201,9 @@ const LeadForm = () => {
 
             <div className="grid md:grid-cols-3 gap-6 pt-6">
               {[
-                { icon: CheckCircle, text: "100% Gratuit", color: "text-emerald-400" },
-                { icon: Zap, text: "Livraison <2min", color: "text-yellow-400" },
-                { icon: Shield, text: "Données sécurisées", color: "text-cyan-400" }
+                { icon: Bot, text: "IA Deepseek v3", color: "text-purple-400" },
+                { icon: Zap, text: "Génération <3min", color: "text-yellow-400" },
+                { icon: Shield, text: "100% Sécurisé", color: "text-cyan-400" }
               ].map((item, index) => (
                 <div key={index} className="flex items-center justify-center text-center">
                   <item.icon className={`w-5 h-5 mr-2 ${item.color}`} />
