@@ -1,6 +1,7 @@
 
 import Hero from "@/components/Hero";
 import KeyFeatures from "@/components/KeyFeatures";
+import VideoSection from "@/components/VideoSection";
 import Testimonials from "@/components/Testimonials";
 import HowItWorks from "@/components/HowItWorks";
 import LeadForm from "@/components/LeadForm";
@@ -12,6 +13,7 @@ const Index = () => {
     <div className="min-h-screen bg-black">
       <Hero />
       <KeyFeatures />
+      <VideoSection />
       <Testimonials />
       <HowItWorks />
       <LeadForm />
