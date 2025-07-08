@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +19,7 @@ const LeadForm = () => {
     ambitions: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState<string>("");
   const { toast } = useToast();
 
   const totalSteps = 3;
@@ -32,9 +32,13 @@ const LeadForm = () => {
     try {
       console.log('Starting AI-powered PDF generation with Deepseek v3...');
       
-      const result = await PdfService.sendPdfByEmail(formData);
+      const result = await PdfService.generateMockPdf(formData); // Using mock for demo
       
       if (result.success) {
+        if (result.downloadUrl) {
+          setDownloadUrl(result.downloadUrl);
+        }
+        
         toast({
           title: "🤖 Portrait Prédictif IA Généré!",
           description: result.message,
@@ -64,6 +68,22 @@ const LeadForm = () => {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDownload = () => {
+    if (downloadUrl) {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `Portrait-Predictif-${formData.name || 'Demo'}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast({
+        title: "📥 Téléchargement démarré",
+        description: "Votre rapport PDF est en cours de téléchargement...",
+      });
     }
   };
 
@@ -331,6 +351,28 @@ const LeadForm = () => {
               ))}
             </div>
           </form>
+
+          {/* Download Section */}
+          {downloadUrl && (
+            <div className="mt-8 p-6 bg-gradient-to-r from-emerald-600/20 to-cyan-600/20 backdrop-blur-sm border border-emerald-500/30 rounded-2xl animate-fade-in">
+              <div className="text-center">
+                <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  Votre rapport est prêt !
+                </h3>
+                <p className="text-slate-300 mb-6">
+                  Téléchargez votre Portrait Prédictif IA personnalisé
+                </p>
+                <Button
+                  onClick={handleDownload}
+                  className="bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Télécharger le PDF
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

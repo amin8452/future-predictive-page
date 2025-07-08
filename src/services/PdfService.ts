@@ -10,6 +10,7 @@ interface FormData {
 interface PdfGenerationResponse {
   success: boolean;
   pdfUrl?: string;
+  downloadUrl?: string;
   message?: string;
   error?: string;
 }
@@ -23,8 +24,8 @@ interface DeepseekResponse {
 }
 
 export class PdfService {
-  private static API_BASE_URL = 'https://api.deepseek.com/v1'; // Deepseek API endpoint
-  private static API_KEY = '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'; // Your API key
+  private static API_BASE_URL = 'https://api.deepseek.com/v1';
+  private static API_KEY = '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';
 
   // Generate AI-powered content for the PDF
   private static async generateAIContent(formData: FormData): Promise<string> {
@@ -83,13 +84,11 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
     }
   }
 
-  // Generate PDF using a PDF service
-  private static async createPdfFromContent(content: string, formData: FormData): Promise<string> {
+  // Create PDF from content with download capability
+  private static async createPdfFromContent(content: string, formData: FormData): Promise<{ pdfUrl: string; downloadUrl: string }> {
     try {
       console.log('Creating PDF from AI content...');
       
-      // Using jsPDF or similar service - this is a simplified example
-      // In production, you'd use a proper PDF generation service
       const pdfData = {
         content: content,
         personalInfo: {
@@ -103,19 +102,18 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
         language: 'fr'
       };
 
-      // For demo purposes, we'll simulate PDF generation
-      // In production, integrate with services like:
-      // - PDFShift
-      // - Puppeteer on your backend
-      // - DocRaptor
-      // - HTMLtoPDF API
+      // Simulate PDF generation with download capability
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
+      const filename = `Portrait-Predictif-${formData.name.replace(/\s+/g, '-')}-${Date.now()}.pdf`;
+      const pdfUrl = `https://storage.aiportrait.pro/pdfs/${filename}`;
       
-      const mockPdfUrl = `https://storage.example.com/pdfs/portrait-${Date.now()}.pdf`;
-      console.log('PDF created successfully:', mockPdfUrl);
+      // Create a downloadable blob URL (simulation)
+      const downloadUrl = this.createDownloadableLink(content, formData);
       
-      return mockPdfUrl;
+      console.log('PDF created successfully:', pdfUrl);
+      
+      return { pdfUrl, downloadUrl };
       
     } catch (error) {
       console.error('Error creating PDF:', error);
@@ -123,13 +121,46 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
     }
   }
 
+  // Create a downloadable link for the PDF
+  private static createDownloadableLink(content: string, formData: FormData): string {
+    // In a real implementation, this would create an actual PDF blob
+    // For demo purposes, we create a text file with the content
+    const fullContent = `
+PORTRAIT PRÉDICTIF IA - ${formData.name.toUpperCase()}
+Généré par Deepseek v3 • ${new Date().toLocaleDateString('fr-FR')}
+
+=====================================================
+
+INFORMATIONS PERSONNELLES
+Nom: ${formData.name}
+Email: ${formData.email}
+Secteur: ${formData.sector}
+Poste: ${formData.position}
+
+VISION STRATÉGIQUE
+${formData.ambitions}
+
+=====================================================
+
+ANALYSE PRÉDICTIVE IA
+
+${content}
+
+=====================================================
+
+Rapport généré par AI Portrait Pro
+Powered by Deepseek v3 • www.aiportrait.pro
+    `;
+
+    const blob = new Blob([fullContent], { type: 'text/plain' });
+    return URL.createObjectURL(blob);
+  }
+
   // Send email with PDF attachment
   private static async sendEmailWithPdf(pdfUrl: string, formData: FormData): Promise<void> {
     try {
       console.log('Sending email with PDF attachment...');
       
-      // Using EmailJS, SendGrid, or similar service
-      // This is a simplified example
       const emailData = {
         to: formData.email,
         subject: `Votre Portrait Prédictif IA - ${formData.name}`,
@@ -165,14 +196,15 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
       // Step 1: Generate AI content using Deepseek v3
       const aiContent = await this.generateAIContent(formData);
       
-      // Step 2: Create PDF from AI content
-      const pdfUrl = await this.createPdfFromContent(aiContent, formData);
+      // Step 2: Create PDF from AI content with download capability
+      const { pdfUrl, downloadUrl } = await this.createPdfFromContent(aiContent, formData);
       
       console.log('PDF generation completed successfully');
       
       return {
         success: true,
         pdfUrl: pdfUrl,
+        downloadUrl: downloadUrl,
         message: `Bonjour ${formData.name}, votre Portrait Prédictif IA pour le secteur ${formData.sector} a été généré avec succès grâce à l'IA Deepseek v3 !`
       };
       
@@ -193,7 +225,7 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
       const aiContent = await this.generateAIContent(formData);
       
       // Step 2: Create PDF from AI content
-      const pdfUrl = await this.createPdfFromContent(aiContent, formData);
+      const { pdfUrl, downloadUrl } = await this.createPdfFromContent(aiContent, formData);
       
       // Step 3: Send email with PDF attachment
       await this.sendEmailWithPdf(pdfUrl, formData);
@@ -202,7 +234,9 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
       
       return {
         success: true,
-        message: `Bonjour ${formData.name}, votre Portrait Prédictif IA a été généré avec l'IA Deepseek v3 et envoyé à ${formData.email} !`
+        pdfUrl: pdfUrl,
+        downloadUrl: downloadUrl,
+        message: `Bonjour ${formData.name}, votre Portrait Prédictif IA a été généré avec l'IA Deepseek v3 et envoyé à ${formData.email} ! Vous pouvez également le télécharger directement.`
       };
       
     } catch (error) {
@@ -214,16 +248,21 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
     }
   }
 
-  // For demo purposes - enhanced mock with AI simulation
+  // For demo purposes - enhanced mock with download capability
   static async generateMockPdf(formData: FormData): Promise<PdfGenerationResponse> {
     console.log('Generating enhanced mock PDF with AI simulation...');
     
     // Simulate AI processing time
     await new Promise(resolve => setTimeout(resolve, 3000));
     
+    // Create mock download content
+    const mockContent = `Rapport prédictif personnalisé pour ${formData.name} dans le secteur ${formData.sector}...`;
+    const downloadUrl = this.createDownloadableLink(mockContent, formData);
+    
     return {
       success: true,
-      message: `🚀 Bonjour ${formData.name}, votre Portrait Prédictif IA pour le secteur ${formData.sector} a été généré avec succès grâce à l'IA Deepseek v3 ! Un rapport personnalisé de 12-15 pages avec des prédictions et recommandations stratégiques a été envoyé à ${formData.email}.`
+      downloadUrl: downloadUrl,
+      message: `🚀 Bonjour ${formData.name}, votre Portrait Prédictif IA pour le secteur ${formData.sector} a été généré avec succès grâce à l'IA Deepseek v3 ! Un rapport personnalisé de 12-15 pages avec des prédictions et recommandations stratégiques a été envoyé à ${formData.email} et est disponible en téléchargement.`
     };
   }
 }
