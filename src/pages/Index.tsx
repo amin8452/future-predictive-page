@@ -1,4 +1,5 @@
 
+import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import KeyFeatures from "@/components/KeyFeatures";
 import VideoSection from "@/components/VideoSection";
@@ -11,14 +12,17 @@ import Footer from "@/components/Footer";
 const Index = () => {
   return (
     <div className="min-h-screen bg-black">
-      <Hero />
-      <KeyFeatures />
-      <VideoSection />
-      <Testimonials />
-      <HowItWorks />
-      <LeadForm />
-      <FAQ />
-      <Footer />
+      <Header />
+      <div className="pt-16"> {/* Add padding to account for fixed header */}
+        <Hero />
+        <KeyFeatures />
+        <VideoSection />
+        <Testimonials />
+        <HowItWorks />
+        <LeadForm />
+        <FAQ />
+        <Footer />
+      </div>
     </div>
   );
 };
