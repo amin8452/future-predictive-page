@@ -6,8 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Shield, Sparkles, CheckCircle, Zap, Brain, Download, Bot, ArrowLeft } from "lucide-react";
+import { ArrowRight, Shield, CheckCircle, Zap, Brain, Download, Bot, ArrowLeft, Mail, Eye } from "lucide-react";
 import { PdfService } from "@/services/PdfService";
+import PdfViewer from "./PdfViewer";
+import EmailView from "./EmailView";
 
 const LeadForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -19,7 +21,12 @@ const LeadForm = () => {
     ambitions: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [downloadUrl, setDownloadUrl] = useState<string>("");
+  const [pdfData, setPdfData] = useState<{
+    downloadUrl: string;
+    pdfContent: string;
+  } | null>(null);
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
+  const [showEmailView, setShowEmailView] = useState(false);
   const { toast } = useToast();
 
   const totalSteps = 3;
@@ -32,11 +39,14 @@ const LeadForm = () => {
     try {
       console.log('Starting AI-powered PDF generation with Deepseek v3...');
       
-      const result = await PdfService.generateMockPdf(formData); // Using mock for demo
+      const result = await PdfService.generateMockPdf(formData);
       
       if (result.success) {
-        if (result.downloadUrl) {
-          setDownloadUrl(result.downloadUrl);
+        if (result.downloadUrl && result.pdfContent) {
+          setPdfData({
+            downloadUrl: result.downloadUrl,
+            pdfContent: result.pdfContent
+          });
         }
         
         toast({
@@ -72,9 +82,9 @@ const LeadForm = () => {
   };
 
   const handleDownload = () => {
-    if (downloadUrl) {
+    if (pdfData?.downloadUrl) {
       const link = document.createElement('a');
-      link.href = downloadUrl;
+      link.href = pdfData.downloadUrl;
       link.download = `Portrait-Predictif-${formData.name || 'Demo'}.txt`;
       document.body.appendChild(link);
       link.click();
@@ -352,8 +362,8 @@ const LeadForm = () => {
             </div>
           </form>
 
-          {/* Download Section */}
-          {downloadUrl && (
+          {/* Results Section */}
+          {pdfData && (
             <div className="mt-8 p-6 bg-gradient-to-r from-emerald-600/20 to-cyan-600/20 backdrop-blur-sm border border-emerald-500/30 rounded-2xl animate-fade-in">
               <div className="text-center">
                 <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
@@ -361,20 +371,60 @@ const LeadForm = () => {
                   Votre rapport est prêt !
                 </h3>
                 <p className="text-slate-300 mb-6">
-                  Téléchargez votre Portrait Prédictif IA personnalisé
+                  Téléchargez, visualisez ou envoyez votre Portrait Prédictif IA personnalisé
                 </p>
-                <Button
-                  onClick={handleDownload}
-                  className="bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
-                >
-                  <Download className="w-5 h-5 mr-2" />
-                  Télécharger le PDF
-                </Button>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <Button
+                    onClick={handleDownload}
+                    className="bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white px-6 py-3 rounded-xl transition-all duration-300"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Télécharger PDF
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowPdfViewer(true)}
+                    variant="outline"
+                    className="border-white/20 bg-white/10 text-white hover:bg-white/20 px-6 py-3 rounded-xl"
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Prévisualiser
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowEmailView(true)}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all duration-300"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Envoyer par email
+                  </Button>
+                </div>
               </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* PDF Viewer Modal */}
+      {pdfData && (
+        <PdfViewer
+          isOpen={showPdfViewer}
+          onClose={() => setShowPdfViewer(false)}
+          pdfContent={pdfData.pdfContent}
+          downloadUrl={pdfData.downloadUrl}
+          userEmail={formData.email}
+          userName={formData.name}
+        />
+      )}
+
+      {/* Email View Modal */}
+      <EmailView
+        isOpen={showEmailView}
+        onClose={() => setShowEmailView(false)}
+        defaultEmail={formData.email}
+        defaultName={formData.name}
+        pdfContent={pdfData?.pdfContent}
+      />
     </section>
   );
 };
