@@ -33,23 +33,55 @@ export class PdfService {
     try {
       console.log('Generating AI content with Deepseek v3...');
       
-      const prompt = `Créez un portrait prédictif professionnel détaillé pour:
+      const prompt = `Créez un portrait prédictif professionnel détaillé et personnalisé pour:
       
-Nom: ${formData.name}
-Email: ${formData.email}
-Secteur: ${formData.sector}
-Poste: ${formData.position}
-Ambitions: ${formData.ambitions}
+PROFIL CLIENT:
+- Nom: ${formData.name}
+- Email: ${formData.email}
+- Secteur d'activité: ${formData.sector}
+- Poste actuel: ${formData.position}
+- Vision stratégique: ${formData.ambitions}
 
-Générez un rapport structuré de 12-15 pages avec:
-1. Analyse de profil professionnel
-2. Prédictions IA pour les 3 prochaines années
-3. Recommandations stratégiques personnalisées
-4. Opportunités de croissance
-5. Défis potentiels et solutions
-6. Plan d'action concret
+INSTRUCTIONS DÉTAILLÉES:
+Générez un rapport complet de 12-15 pages structuré avec les sections suivantes:
 
-Le rapport doit être professionnel, personnalisé et actionnable.`;
+1. RÉSUMÉ EXÉCUTIF
+   - Synthèse du profil professionnel
+   - Points clés de l'analyse prédictive
+
+2. ANALYSE APPROFONDIE DU PROFIL
+   - Évaluation des compétences actuelles dans le secteur ${formData.sector}
+   - Positionnement stratégique en tant que ${formData.position}
+   - Forces et opportunités d'amélioration
+
+3. PRÉDICTIONS IA POUR LES 3 PROCHAINES ANNÉES
+   - 2025: Tendances sectorielles et opportunités immédiates
+   - 2026: Évolutions technologiques et transformation du marché
+   - 2027: Positionnement futur et leadership potentiel
+
+4. RECOMMANDATIONS STRATÉGIQUES PERSONNALISÉES
+   - Actions prioritaires à court terme (0-6 mois)
+   - Développement de compétences à moyen terme (6-18 mois)
+   - Vision à long terme et objectifs stratégiques
+
+5. OPPORTUNITÉS DE CROISSANCE SPÉCIFIQUES
+   - Niches d'expertise à développer dans ${formData.sector}
+   - Réseaux professionnels à activer
+   - Partenariats stratégiques recommandés
+
+6. DÉFIS POTENTIELS ET SOLUTIONS
+   - Obstacles prévisibles dans l'industrie
+   - Stratégies de mitigation des risques
+   - Plans de contingence
+
+7. PLAN D'ACTION CONCRET
+   - Roadmap détaillée sur 36 mois
+   - Indicateurs de performance clés (KPIs)
+   - Étapes de validation et d'ajustement
+
+Basez-vous sur les ambitions spécifiques mentionnées: "${formData.ambitions}"
+
+Le rapport doit être professionnel, hautement personnalisé et immédiatement actionnable. Utilisez un langage expert adapté au niveau ${formData.position} dans le secteur ${formData.sector}.`;
 
       const response = await fetch(`${this.API_BASE_URL}/chat/completions`, {
         method: 'POST',
@@ -61,6 +93,10 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
           model: 'deepseek/deepseek-r1-0528:free',
           messages: [
             {
+              role: 'system',
+              content: 'Vous êtes un consultant senior en stratégie d\'entreprise et développement professionnel. Créez des rapports détaillés, personnalisés et actionables.'
+            },
+            {
               role: 'user',
               content: prompt
             }
@@ -71,13 +107,21 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
       });
 
       if (!response.ok) {
-        throw new Error(`Deepseek API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Deepseek API error:', response.status, errorText);
+        throw new Error(`Erreur API Deepseek: ${response.status}`);
       }
 
       const result: DeepseekResponse = await response.json();
       console.log('AI content generated successfully');
       
-      return result.choices[0]?.message?.content || 'Erreur lors de la génération du contenu IA';
+      const aiContent = result.choices[0]?.message?.content;
+      
+      if (!aiContent) {
+        throw new Error('Contenu IA vide');
+      }
+      
+      return aiContent;
       
     } catch (error) {
       console.error('Error generating AI content:', error);
@@ -85,40 +129,58 @@ Le rapport doit être professionnel, personnalisé et actionnable.`;
     }
   }
 
-  // Create PDF from content with download capability
-  private static async createPdfFromContent(content: string, formData: FormData): Promise<{ pdfUrl: string; downloadUrl: string; pdfContent: string }> {
+  // Create PDF from AI-generated content
+  private static async createPdfFromContent(aiContent: string, formData: FormData): Promise<{ pdfUrl: string; downloadUrl: string; pdfContent: string }> {
     try {
       console.log('Creating PDF from AI content...');
       
       const pdfContent = `
+═══════════════════════════════════════════════════════════════
 PORTRAIT PRÉDICTIF IA - ${formData.name.toUpperCase()}
+═══════════════════════════════════════════════════════════════
+
 Généré par Deepseek v3 • ${new Date().toLocaleDateString('fr-FR')}
+Rapport personnalisé pour ${formData.name}
 
-=====================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-INFORMATIONS PERSONNELLES
-Nom: ${formData.name}
-Email: ${formData.email}
-Secteur: ${formData.sector}
-Poste: ${formData.position}
+INFORMATIONS DU PROFIL CLIENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-VISION STRATÉGIQUE
-${formData.ambitions}
+👤 Nom: ${formData.name}
+📧 Email: ${formData.email}
+🏢 Secteur: ${formData.sector}
+💼 Poste: ${formData.position}
+🎯 Vision: ${formData.ambitions}
 
-=====================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-ANALYSE PRÉDICTIVE IA
+ANALYSE PRÉDICTIVE DEEPSEEK V3
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-${content}
+${aiContent}
 
-=====================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INFORMATIONS TECHNIQUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🤖 Modèle IA: Deepseek v3 (deepseek-r1-0528)
+📊 Analyse: Prédictive personnalisée
+🎯 Horizon: 3 ans (2025-2027)
+📈 Niveau: Professionnel expert
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Rapport généré par AI Portrait Pro
 Powered by Deepseek v3 • www.aiportrait.pro
+© ${new Date().getFullYear()} - Tous droits réservés
+
+═══════════════════════════════════════════════════════════════
       `;
 
-      // Simulate PDF generation with download capability
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Simulate PDF generation time
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       const filename = `Portrait-Predictif-${formData.name.replace(/\s+/g, '-')}-${Date.now()}.pdf`;
       const pdfUrl = `https://storage.aiportrait.pro/pdfs/${filename}`;
@@ -137,6 +199,7 @@ Powered by Deepseek v3 • www.aiportrait.pro
     }
   }
 
+  // Main method to generate PDF using real AI content
   static async generatePdf(formData: FormData): Promise<PdfGenerationResponse> {
     try {
       console.log('Starting AI-powered PDF generation process...');
@@ -144,7 +207,7 @@ Powered by Deepseek v3 • www.aiportrait.pro
       // Step 1: Generate AI content using Deepseek v3
       const aiContent = await this.generateAIContent(formData);
       
-      // Step 2: Create PDF from AI content with download capability
+      // Step 2: Create PDF from AI content
       const { pdfUrl, downloadUrl, pdfContent } = await this.createPdfFromContent(aiContent, formData);
       
       console.log('PDF generation completed successfully');
@@ -154,7 +217,7 @@ Powered by Deepseek v3 • www.aiportrait.pro
         pdfUrl: pdfUrl,
         downloadUrl: downloadUrl,
         pdfContent: pdfContent,
-        message: `Bonjour ${formData.name}, votre Portrait Prédictif IA pour le secteur ${formData.sector} a été généré avec succès grâce à l'IA Deepseek v3 !`
+        message: `🤖 Bonjour ${formData.name}, votre Portrait Prédictif IA personnalisé pour le secteur ${formData.sector} a été généré avec succès ! Un rapport détaillé de 12-15 pages avec des analyses et recommandations spécifiques à votre profil ${formData.position} a été créé par Deepseek v3.`
       };
       
     } catch (error) {
@@ -166,34 +229,75 @@ Powered by Deepseek v3 • www.aiportrait.pro
     }
   }
 
-  // For demo purposes - enhanced mock with download capability
+  // Fallback method for demo purposes
   static async generateMockPdf(formData: FormData): Promise<PdfGenerationResponse> {
-    console.log('Generating enhanced mock PDF with AI simulation...');
+    console.log('Using fallback - generating mock PDF...');
     
     // Simulate AI processing time
     await new Promise(resolve => setTimeout(resolve, 3000));
     
-    // Create mock content
     const mockContent = `
-PORTRAIT PRÉDICTIF IA - ${formData.name.toUpperCase()}
+RÉSUMÉ EXÉCUTIF
 
-1. ANALYSE PROFESSIONNELLE
-Votre profil dans le secteur ${formData.sector} révèle des compétences exceptionnelles en leadership et innovation. Votre poste de ${formData.position} vous positionne idéalement pour les évolutions futures du marché.
+Votre profil dans le secteur ${formData.sector} révèle un potentiel de leadership exceptionnel. En tant que ${formData.position}, vous êtes positionné(e) de manière stratégique pour capitaliser sur les évolutions du marché.
 
-2. PRÉDICTIONS 3 ANS
-- 2025: Consolidation de votre expertise et développement de nouvelles compétences digitales
-- 2026: Opportunités de promotion et élargissement de votre périmètre d'action
-- 2027: Position de leader reconnu dans votre domaine avec impact stratégique majeur
+ANALYSE APPROFONDIE DU PROFIL
 
-3. RECOMMANDATIONS STRATÉGIQUES
-- Développer vos compétences en IA et transformation digitale
-- Renforcer votre réseau professionnel dans ${formData.sector}
-- Préparer votre transition vers des rôles de direction
+Secteur d'activité: ${formData.sector}
+- Tendances actuelles du marché
+- Opportunités de croissance identifiées
+- Positionnement concurrentiel
 
-4. PLAN D'ACTION
-Vos ambitions "${formData.ambitions}" sont parfaitement alignées avec les tendances du marché. Nous recommandons un focus sur l'innovation et le leadership.
+Poste actuel: ${formData.position}
+- Compétences clés validées
+- Axes de développement prioritaires
+- Potentiel d'évolution
 
-Rapport généré par AI Portrait Pro - Deepseek v3
+PRÉDICTIONS IA POUR LES 3 PROCHAINES ANNÉES
+
+2025: Consolidation et spécialisation
+- Développement de votre expertise dans ${formData.sector}
+- Renforcement de votre positionnement de ${formData.position}
+- Opportunités de croissance immédiate
+
+2026: Expansion et innovation
+- Élargissement de votre périmètre d'influence
+- Développement de nouvelles compétences digitales
+- Leadership dans la transformation de ${formData.sector}
+
+2027: Leadership et impact
+- Position de référence dans votre domaine
+- Capacité d'influence sur les décisions stratégiques
+- Réalisation de vos ambitions: "${formData.ambitions}"
+
+RECOMMANDATIONS STRATÉGIQUES
+
+Actions prioritaires:
+1. Renforcer votre expertise technique dans ${formData.sector}
+2. Développer votre réseau professionnel
+3. Acquérir des compétences en management de l'innovation
+4. Préparer votre transition vers des rôles de direction
+
+PLAN D'ACTION CONCRET
+
+Phase 1 (0-12 mois):
+- Formation spécialisée dans ${formData.sector}
+- Certification en leadership
+- Expansion du réseau professionnel
+
+Phase 2 (12-24 mois):
+- Prise de responsabilités élargies
+- Pilotage de projets innovants
+- Mentorat et développement d'équipes
+
+Phase 3 (24-36 mois):
+- Positionnement en tant qu'expert reconnu
+- Contribution à la stratégie d'entreprise
+- Réalisation des objectifs: "${formData.ambitions}"
+
+CONCLUSION
+
+Votre profil présente un potentiel exceptionnel pour réussir dans ${formData.sector}. Les prédictions IA montrent une trajectoire positive vers l'atteinte de vos ambitions stratégiques.
     `;
     
     const blob = new Blob([mockContent], { type: 'text/plain' });
@@ -203,7 +307,7 @@ Rapport généré par AI Portrait Pro - Deepseek v3
       success: true,
       downloadUrl: downloadUrl,
       pdfContent: mockContent,
-      message: `🚀 Bonjour ${formData.name}, votre Portrait Prédictif IA pour le secteur ${formData.sector} a été généré avec succès grâce à l'IA Deepseek v3 ! Un rapport personnalisé de 12-15 pages avec des prédictions et recommandations stratégiques a été créé.`
+      message: `🚀 Bonjour ${formData.name}, votre Portrait Prédictif IA pour le secteur ${formData.sector} a été généré avec succès ! Un rapport personnalisé avec des prédictions et recommandations spécifiques à votre profil ${formData.position} a été créé.`
     };
   }
 }

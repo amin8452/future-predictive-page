@@ -39,7 +39,7 @@ const LeadForm = () => {
     try {
       console.log('Starting AI-powered PDF generation with Deepseek v3...');
       
-      const result = await PdfService.generateMockPdf(formData);
+      const result = await PdfService.generatePdf(formData);
       
       if (result.success) {
         if (result.downloadUrl && result.pdfContent) {
