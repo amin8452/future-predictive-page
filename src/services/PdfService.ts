@@ -1,4 +1,3 @@
-
 import jsPDF from 'jspdf';
 
 interface FormData {
@@ -122,100 +121,220 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
 
   private static createPdfFromContent(aiContent: string, formData: FormData): Blob {
     try {
-      console.log('📄 Création du PDF professionnel...');
+      console.log('📄 Création du PDF avec design moderne...');
       
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 20;
-      const lineHeight = 7;
       let yPosition = 30;
 
-      // Header avec style moderne
-      pdf.setFillColor(6, 182, 212); // cyan-500
-      pdf.rect(0, 0, pageWidth, 25, 'F');
+      // Page de couverture moderne
+      this.createCoverPage(pdf, formData, pageWidth, pageHeight);
       
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(20);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('PORTRAIT PRÉDICTIF IA', margin, 15);
-      
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`Généré pour ${formData.name}`, margin, 22);
-
-      // Informations client avec style
-      yPosition = 40;
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(14);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('INFORMATIONS CLIENT', margin, yPosition);
-      
-      yPosition += 10;
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`👤 Nom: ${formData.name}`, margin, yPosition);
-      yPosition += 6;
-      pdf.text(`🏢 Secteur: ${formData.sector}`, margin, yPosition);
-      yPosition += 6;
-      pdf.text(`💼 Poste: ${formData.position}`, margin, yPosition);
-      yPosition += 6;
-      pdf.text(`🎯 Vision: ${formData.ambitions}`, margin, yPosition);
-      yPosition += 6;
-      pdf.text(`📅 Généré le: ${new Date().toLocaleDateString('fr-FR')}`, margin, yPosition);
-
-      // Séparateur
-      yPosition += 15;
-      pdf.setDrawColor(6, 182, 212);
-      pdf.setLineWidth(0.5);
-      pdf.line(margin, yPosition, pageWidth - margin, yPosition);
-
-      // Contenu IA formaté
-      yPosition += 15;
-      pdf.setFontSize(16);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setTextColor(6, 182, 212);
-      pdf.text('ANALYSE PRÉDICTIVE DEEPSEEK V3', margin, yPosition);
-
-      yPosition += 15;
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'normal');
-      pdf.setTextColor(0, 0, 0);
-
-      // Formatage du contenu avec retours à la ligne
-      const lines = pdf.splitTextToSize(aiContent, pageWidth - 2 * margin);
-      
-      for (let i = 0; i < lines.length; i++) {
-        if (yPosition > 280) { // Nouvelle page si nécessaire
-          pdf.addPage();
-          yPosition = 20;
-        }
-        pdf.text(lines[i], margin, yPosition);
-        yPosition += lineHeight;
-      }
-
-      // Footer professionnel
+      // Nouvelle page pour le contenu
       pdf.addPage();
-      yPosition = 50;
-      
-      pdf.setFillColor(15, 23, 42); // slate-900
-      pdf.rect(0, 260, pageWidth, 37, 'F');
-      
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('AI Portrait Pro - Powered by Deepseek v3', margin, 275);
-      
-      pdf.setFontSize(8);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('Rapport professionnel généré par intelligence artificielle', margin, 285);
-      pdf.text(`© ${new Date().getFullYear()} - Tous droits réservés`, margin, 292);
+      yPosition = 30;
 
-      console.log('✅ PDF créé avec succès');
+      // En-tête de contenu
+      this.createContentHeader(pdf, formData, pageWidth, margin, yPosition);
+      yPosition += 40;
+
+      // Traitement du contenu IA avec formatage moderne
+      const formattedContent = this.formatAIContent(aiContent);
+      this.addFormattedContent(pdf, formattedContent, pageWidth, margin, yPosition);
+
+      // Pied de page sur toutes les pages
+      this.addFooterToAllPages(pdf, formData);
+
+      console.log('✅ PDF moderne créé avec succès');
       return pdf.output('blob');
       
     } catch (error) {
       console.error('❌ Erreur création PDF:', error);
       throw new Error('Impossible de créer le PDF');
+    }
+  }
+
+  private static createCoverPage(pdf: jsPDF, formData: FormData, pageWidth: number, pageHeight: number) {
+    // Arrière-plan dégradé simulé
+    pdf.setFillColor(15, 23, 42); // slate-900
+    pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+    
+    // Bande décorative en haut
+    pdf.setFillColor(6, 182, 212); // cyan-500
+    pdf.rect(0, 0, pageWidth, 30, 'F');
+    
+    // Titre principal
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(36);
+    pdf.setFont('helvetica', 'bold');
+    const titleY = 80;
+    pdf.text('PORTRAIT', pageWidth/2, titleY, { align: 'center' });
+    
+    pdf.setFontSize(32);
+    pdf.setTextColor(6, 182, 212);
+    pdf.text('PRÉDICTIF IA', pageWidth/2, titleY + 15, { align: 'center' });
+    
+    // Sous-titre
+    pdf.setFontSize(18);
+    pdf.setTextColor(148, 163, 184); // slate-400
+    pdf.text('Analyse Stratégique Personnalisée', pageWidth/2, titleY + 35, { align: 'center' });
+    
+    // Informations client dans un cadre moderne
+    const boxY = 140;
+    pdf.setFillColor(30, 41, 59); // slate-800
+    pdf.roundedRect(30, boxY, pageWidth - 60, 80, 10, 10, 'F');
+    
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PROFIL CLIENT', pageWidth/2, boxY + 15, { align: 'center' });
+    
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(203, 213, 225); // slate-300
+    let infoY = boxY + 30;
+    pdf.text(`👤 ${formData.name}`, 40, infoY);
+    infoY += 8;
+    pdf.text(`🏢 ${formData.sector}`, 40, infoY);
+    infoY += 8;
+    pdf.text(`💼 ${formData.position}`, 40, infoY);
+    infoY += 8;
+    pdf.text(`🎯 ${formData.ambitions.substring(0, 50)}...`, 40, infoY);
+    
+    // Date et technologie
+    pdf.setFontSize(10);
+    pdf.setTextColor(148, 163, 184);
+    pdf.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, pageWidth/2, 250, { align: 'center' });
+    pdf.text('Powered by Deepseek v3 AI', pageWidth/2, 260, { align: 'center' });
+    
+    // Logo/Badge IA
+    pdf.setFillColor(6, 182, 212);
+    pdf.circle(pageWidth/2, 280, 15, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('IA', pageWidth/2, 285, { align: 'center' });
+  }
+
+  private static createContentHeader(pdf: jsPDF, formData: FormData, pageWidth: number, margin: number, yPosition: number) {
+    // En-tête de section
+    pdf.setFillColor(6, 182, 212);
+    pdf.rect(margin, yPosition - 5, pageWidth - 2 * margin, 25, 'F');
+    
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(18);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('ANALYSE PRÉDICTIVE DEEPSEEK V3', margin + 5, yPosition + 8);
+    
+    pdf.setFontSize(10);
+    pdf.text(`Rapport personnalisé pour ${formData.name}`, margin + 5, yPosition + 16);
+  }
+
+  private static formatAIContent(content: string): Array<{type: string, content: string, level?: number}> {
+    const lines = content.split('\n');
+    const formatted = [];
+    
+    for (let line of lines) {
+      line = line.trim();
+      if (!line) continue;
+      
+      // Détection des titres et sections
+      if (line.match(/^#{1,6}\s/)) {
+        const level = (line.match(/^#+/) || [''])[0].length;
+        const title = line.replace(/^#+\s*/, '');
+        formatted.push({type: 'heading', content: title, level});
+      } else if (line.match(/^\*\s/) || line.match(/^-\s/) || line.match(/^\d+\.\s/)) {
+        const cleanLine = line.replace(/^[\*\-\d+\.]\s*/, '');
+        formatted.push({type: 'bullet', content: cleanLine});
+      } else if (line.match(/^\|.*\|$/)) {
+        // Ignorer les tableaux markdown pour une meilleure présentation
+        continue;
+      } else {
+        formatted.push({type: 'paragraph', content: line});
+      }
+    }
+    
+    return formatted;
+  }
+
+  private static addFormattedContent(pdf: jsPDF, content: Array<{type: string, content: string, level?: number}>, pageWidth: number, margin: number, startY: number) {
+    let yPosition = startY;
+    const lineHeight = 6;
+    const maxWidth = pageWidth - 2 * margin;
+    
+    for (const item of content) {
+      // Vérifier si nouvelle page nécessaire
+      if (yPosition > 250) {
+        pdf.addPage();
+        yPosition = 30;
+      }
+      
+      switch (item.type) {
+        case 'heading':
+          yPosition += 10; // Espacement avant titre
+          const fontSize = item.level === 1 ? 16 : item.level === 2 ? 14 : 12;
+          pdf.setFontSize(fontSize);
+          pdf.setFont('helvetica', 'bold');
+          pdf.setTextColor(6, 182, 212); // cyan-500
+          
+          // Ligne décorative pour les titres principaux
+          if (item.level === 1) {
+            pdf.setDrawColor(6, 182, 212);
+            pdf.setLineWidth(2);
+            pdf.line(margin, yPosition - 2, margin + 50, yPosition - 2);
+          }
+          
+          const titleLines = pdf.splitTextToSize(item.content, maxWidth);
+          pdf.text(titleLines, margin, yPosition);
+          yPosition += titleLines.length * (fontSize * 0.4) + 8;
+          break;
+          
+        case 'bullet':
+          pdf.setFontSize(10);
+          pdf.setFont('helvetica', 'normal');
+          pdf.setTextColor(51, 65, 85); // slate-700
+          
+          // Puce colorée
+          pdf.setFillColor(6, 182, 212);
+          pdf.circle(margin + 3, yPosition - 2, 1, 'F');
+          
+          const bulletLines = pdf.splitTextToSize(item.content, maxWidth - 10);
+          pdf.text(bulletLines, margin + 8, yPosition);
+          yPosition += bulletLines.length * lineHeight + 3;
+          break;
+          
+        case 'paragraph':
+          pdf.setFontSize(10);
+          pdf.setFont('helvetica', 'normal');
+          pdf.setTextColor(51, 65, 85);
+          
+          const paragraphLines = pdf.splitTextToSize(item.content, maxWidth);
+          pdf.text(paragraphLines, margin, yPosition);
+          yPosition += paragraphLines.length * lineHeight + 5;
+          break;
+      }
+    }
+  }
+
+  private static addFooterToAllPages(pdf: jsPDF, formData: FormData) {
+    const totalPages = pdf.getNumberOfPages();
+    
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      
+      // Ligne décorative
+      pdf.setDrawColor(6, 182, 212);
+      pdf.setLineWidth(0.5);
+      pdf.line(20, 280, 190, 280);
+      
+      // Texte du pied de page
+      pdf.setFontSize(8);
+      pdf.setTextColor(100, 116, 139); // slate-500
+      pdf.text('AI Portrait Pro - Powered by Deepseek v3', 20, 285);
+      pdf.text(`Page ${i}/${totalPages}`, 190, 285, { align: 'right' });
+      pdf.text(`© ${new Date().getFullYear()} - Rapport confidentiel généré pour ${formData.name}`, 105, 290, { align: 'center' });
     }
   }
 

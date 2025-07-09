@@ -1,7 +1,8 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Download, Mail, X, FileText, Eye, Sparkles, Clock } from "lucide-react";
+import { Download, Mail, X, FileText, Eye, Sparkles, Clock, Star, Zap, Award } from "lucide-react";
 import { EmailService } from "@/services/EmailService";
 import { useToast } from "@/hooks/use-toast";
 
@@ -117,85 +118,127 @@ L'équipe AI Portrait Pro`,
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[95vh] p-0 bg-gradient-to-br from-slate-50 to-white border-0 shadow-2xl">
-        <DialogHeader className="px-8 py-6 bg-gradient-to-r from-cyan-500 to-blue-600 text-white">
-          <DialogTitle className="text-2xl font-bold flex items-center gap-3">
-            <div className="p-2 bg-white/20 rounded-lg">
-              <Sparkles className="w-6 h-6" />
+      <DialogContent className="max-w-7xl max-h-[95vh] p-0 section-background border-0 shadow-2xl">
+        {/* Header avec design moderne */}
+        <DialogHeader className="relative px-8 py-8 bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 text-white overflow-hidden">
+          <div className="absolute inset-0 bg-pattern-dots opacity-20"></div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 glass-card rounded-2xl">
+                <Sparkles className="w-8 h-8 text-cyan-200" />
+              </div>
+              <div>
+                <DialogTitle className="text-3xl font-bold gradient-text-primary">
+                  Portrait Prédictif IA
+                </DialogTitle>
+                <p className="text-cyan-100 text-lg mt-1">
+                  Rapport personnalisé pour {userName}
+                </p>
+              </div>
             </div>
-            Portrait Prédictif IA
-            <span className="text-cyan-100 text-lg font-normal">• {userName}</span>
-          </DialogTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="absolute right-4 top-4 text-white hover:bg-white/20 rounded-full p-2"
-          >
-            <X className="w-5 h-5" />
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="glass-button text-white hover:bg-white/20 rounded-full p-3"
+            >
+              <X className="w-6 h-6" />
+            </Button>
+          </div>
+          
+          {/* Indicateurs de qualité */}
+          <div className="relative z-10 flex items-center space-x-6 mt-6">
+            <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
+              <Star className="w-4 h-4 text-yellow-300" />
+              <span className="text-sm text-cyan-100">IA Avancée</span>
+            </div>
+            <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
+              <Zap className="w-4 h-4 text-green-300" />
+              <span className="text-sm text-cyan-100">Deepseek v3</span>
+            </div>
+            <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
+              <Award className="w-4 h-4 text-purple-300" />
+              <span className="text-sm text-cyan-100">Professionnel</span>
+            </div>
+          </div>
         </DialogHeader>
 
-        <div className="flex flex-col h-full">
-          {/* Actions Bar Moderne */}
-          <div className="px-8 py-6 bg-gradient-to-r from-slate-50 to-white border-b">
+        <div className="flex flex-col h-full bg-gradient-to-br from-slate-950 via-indigo-950/30 to-slate-950">
+          {/* Barre d'actions moderne */}
+          <div className="px-8 py-6 border-b border-white/10">
             <div className="flex flex-wrap gap-4 items-center justify-between">
               <div className="flex gap-4">
                 <Button
                   onClick={handleDownload}
-                  className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105"
+                  className="btn-primary px-8 py-3 text-lg font-bold shadow-xl"
                 >
-                  <Download className="w-4 h-4 mr-2" />
+                  <Download className="w-5 h-5 mr-3" />
                   Télécharger PDF
                 </Button>
                 
                 <Button
                   onClick={handleSendEmail}
                   disabled={isSendingEmail}
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105"
+                  className="btn-secondary px-8 py-3 text-lg font-bold shadow-xl"
                 >
-                  <Mail className="w-4 h-4 mr-2" />
                   {isSendingEmail ? (
                     <>
-                      <Clock className="w-4 h-4 mr-2 animate-spin" />
-                      Envoi...
+                      <Clock className="w-5 h-5 mr-3 animate-spin" />
+                      Envoi en cours...
                     </>
                   ) : (
-                    'Envoyer par email'
+                    <>
+                      <Mail className="w-5 h-5 mr-3" />
+                      Envoyer par email
+                    </>
                   )}
                 </Button>
               </div>
               
-              <div className="flex items-center gap-2 text-slate-600 text-sm bg-slate-100 px-4 py-2 rounded-xl">
-                <Eye className="w-4 h-4 text-cyan-500" />
-                Rapport IA professionnel
+              <div className="glass-card px-6 py-3 rounded-xl">
+                <div className="flex items-center gap-3 text-cyan-400">
+                  <Eye className="w-5 h-5" />
+                  <span className="text-white font-semibold">Rapport IA Premium</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Prévisualisation PDF Moderne */}
+          {/* Zone de prévisualisation moderne */}
           <div className="flex-1 p-8">
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden h-full">
-              <div className="bg-gradient-to-r from-slate-100 to-slate-50 px-6 py-4 border-b flex items-center gap-3">
-                <FileText className="w-5 h-5 text-cyan-500" />
-                <h3 className="font-semibold text-slate-800">Prévisualisation du rapport</h3>
-                <div className="ml-auto text-xs text-slate-500 bg-white px-3 py-1 rounded-full">
-                  PDF • Généré par IA
+            <div className="glass-card rounded-3xl overflow-hidden h-full border border-white/20 shadow-2xl">
+              <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-8 py-6 border-b border-white/10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="p-2 bg-cyan-500/20 rounded-xl">
+                      <FileText className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white">Prévisualisation du rapport</h3>
+                      <p className="text-slate-300 text-sm">Généré par intelligence artificielle</p>
+                    </div>
+                  </div>
+                  <div className="glass-card px-4 py-2 rounded-xl">
+                    <span className="text-cyan-400 text-sm font-semibold">PDF • Premium</span>
+                  </div>
                 </div>
               </div>
               
-              <div className="h-[60vh] w-full">
+              <div className="h-[65vh] w-full bg-white/5">
                 {pdfPreviewUrl ? (
                   <iframe
                     src={pdfPreviewUrl}
-                    className="w-full h-full border-0"
+                    className="w-full h-full border-0 rounded-b-3xl"
                     title="Prévisualisation PDF"
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-full bg-slate-50">
-                    <div className="text-center">
-                      <FileText className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                      <p className="text-slate-500">Prévisualisation en cours de chargement...</p>
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center animate-pulse">
+                      <div className="p-6 glass-card rounded-3xl mb-6 inline-block">
+                        <FileText className="w-16 h-16 text-cyan-400 mx-auto" />
+                      </div>
+                      <h4 className="text-xl font-bold text-white mb-2">Chargement en cours...</h4>
+                      <p className="text-slate-400">Préparation de votre rapport IA</p>
                     </div>
                   </div>
                 )}
@@ -203,13 +246,17 @@ L'équipe AI Portrait Pro`,
             </div>
           </div>
 
-          {/* Footer Professionnel */}
-          <div className="px-8 py-4 bg-gradient-to-r from-slate-900 to-slate-800 text-center">
-            <div className="text-slate-300 text-sm mb-1">
-              Rapport généré par <span className="text-cyan-400 font-semibold">AI Portrait Pro</span>
-            </div>
-            <div className="text-slate-500 text-xs">
-              Powered by Deepseek v3 • Intelligence Artificielle Avancée
+          {/* Footer premium */}
+          <div className="px-8 py-6 bg-gradient-to-r from-slate-900 via-indigo-900/50 to-slate-900 border-t border-white/10">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 text-cyan-400 text-lg font-bold mb-2">
+                <Sparkles className="w-5 h-5" />
+                AI Portrait Pro
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <p className="text-slate-400 text-sm">
+                Powered by Deepseek v3 • Intelligence Artificielle de Nouvelle Génération
+              </p>
             </div>
           </div>
         </div>
