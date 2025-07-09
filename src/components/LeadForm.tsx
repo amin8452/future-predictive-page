@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles, Zap, FileText, CheckCircle } from "lucide-react";
+import { Loader2, Sparkles, Zap, FileText, CheckCircle, User, Mail, Building, Target } from "lucide-react";
 import { PdfService } from "@/services/PdfService";
 import { useToast } from "@/hooks/use-toast";
 import PdfViewer from "./PdfViewer";
@@ -102,127 +102,129 @@ const LeadForm = () => {
 
   return (
     <>
-      <section className="py-20 px-4 bg-gradient-to-br from-slate-50 via-white to-cyan-50">
+      <section className="py-20 px-4 section-background">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
-              <Sparkles className="w-4 h-4" />
+          <div className="text-center mb-12 animate-fade-in">
+            <div className="inline-flex items-center gap-2 glass-card text-white px-6 py-3 rounded-full text-sm font-semibold mb-8">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
               Powered by Deepseek v3
             </div>
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-5xl font-bold gradient-text-primary mb-6">
               Générez Votre Portrait Prédictif IA
             </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
               Obtenez une analyse personnalisée de votre avenir professionnel en quelques minutes
             </p>
           </div>
 
-          <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
-            <CardHeader className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-t-lg">
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <FileText className="w-6 h-6" />
+          <Card className="glass-card border-white/10 animate-scale-in">
+            <CardHeader className="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 backdrop-blur-sm rounded-t-3xl border-b border-white/10">
+              <CardTitle className="text-2xl flex items-center gap-3 text-white">
+                <div className="p-2 bg-cyan-500/20 rounded-lg">
+                  <FileText className="w-6 h-6 text-cyan-400" />
+                </div>
                 Informations Professionnelles
               </CardTitle>
-              <CardDescription className="text-cyan-100">
+              <CardDescription className="text-slate-300">
                 Remplissez ces informations pour une analyse IA personnalisée
               </CardDescription>
             </CardHeader>
             
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <CardContent className="p-8 space-y-8">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-semibold text-slate-700">
+                  <div className="space-y-3">
+                    <label className="text-sm font-semibold text-white flex items-center gap-2">
+                      <User className="w-4 h-4 text-cyan-400" />
                       Nom complet *
                     </label>
                     <Input
-                      id="name"
                       name="name"
                       type="text"
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="Votre nom complet"
-                      className="border-slate-300 focus:border-cyan-500 focus:ring-cyan-500"
+                      className="input-field h-12"
                       required
                     />
                   </div>
                   
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-semibold text-slate-700">
+                  <div className="space-y-3">
+                    <label className="text-sm font-semibold text-white flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-cyan-400" />
                       Email professionnel *
                     </label>
                     <Input
-                      id="email"
                       name="email"
                       type="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="votre.email@entreprise.com"
-                      className="border-slate-300 focus:border-cyan-500 focus:ring-cyan-500"
+                      className="input-field h-12"
                       required
                     />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="sector" className="text-sm font-semibold text-slate-700">
+                  <div className="space-y-3">
+                    <label className="text-sm font-semibold text-white flex items-center gap-2">
+                      <Building className="w-4 h-4 text-cyan-400" />
                       Secteur d'activité *
                     </label>
                     <Input
-                      id="sector"
                       name="sector"
                       type="text"
                       value={formData.sector}
                       onChange={handleInputChange}
                       placeholder="ex: Technologie, Finance, Santé..."
-                      className="border-slate-300 focus:border-cyan-500 focus:ring-cyan-500"
+                      className="input-field h-12"
                       required
                     />
                   </div>
                   
-                  <div className="space-y-2">
-                    <label htmlFor="position" className="text-sm font-semibold text-slate-700">
+                  <div className="space-y-3">
+                    <label className="text-sm font-semibold text-white flex items-center gap-2">
+                      <Target className="w-4 h-4 text-cyan-400" />
                       Poste actuel *
                     </label>
                     <Input
-                      id="position"
                       name="position"
                       type="text"
                       value={formData.position}
                       onChange={handleInputChange}
                       placeholder="ex: Manager, Consultant, Entrepreneur..."
-                      className="border-slate-300 focus:border-cyan-500 focus:ring-cyan-500"
+                      className="input-field h-12"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="ambitions" className="text-sm font-semibold text-slate-700">
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-cyan-400" />
                     Vos ambitions professionnelles
                   </label>
                   <Textarea
-                    id="ambitions"
                     name="ambitions"
                     value={formData.ambitions}
                     onChange={handleInputChange}
                     placeholder="Décrivez vos objectifs, projets, et où vous vous voyez dans 3 ans..."
-                    className="border-slate-300 focus:border-cyan-500 focus:ring-cyan-500 min-h-[120px]"
+                    className="input-field min-h-[120px] resize-none"
                     rows={4}
                   />
                 </div>
 
                 {/* Statut de génération */}
                 {isGenerating && (
-                  <div className="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl p-6">
+                  <div className="glass-card p-6 border-cyan-400/30 animate-pulse">
                     <div className="flex items-center gap-3 mb-3">
-                      <Loader2 className="w-5 h-5 animate-spin text-cyan-600" />
-                      <span className="font-semibold text-cyan-800">Génération en cours...</span>
+                      <Loader2 className="w-5 h-5 animate-spin text-cyan-400" />
+                      <span className="font-semibold text-cyan-400">Génération en cours...</span>
                     </div>
-                    <p className="text-cyan-700 text-sm">{generationStep}</p>
-                    <div className="mt-3 bg-cyan-200 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-cyan-500 to-blue-600 h-2 rounded-full animate-pulse" style={{width: '60%'}}></div>
+                    <p className="text-slate-300 text-sm mb-4">{generationStep}</p>
+                    <div className="bg-slate-800 rounded-full h-2 overflow-hidden">
+                      <div className="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full animate-pulse w-3/4 transition-all duration-1000"></div>
                     </div>
                   </div>
                 )}
@@ -230,7 +232,7 @@ const LeadForm = () => {
                 <Button
                   type="submit"
                   disabled={isGenerating}
-                  className="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white py-4 text-lg font-semibold rounded-xl shadow-lg transition-all duration-300 transform hover:scale-[1.02]"
+                  className="w-full btn-primary h-14 text-lg font-semibold"
                 >
                   {isGenerating ? (
                     <>
@@ -245,18 +247,18 @@ const LeadForm = () => {
                   )}
                 </Button>
 
-                <div className="text-center text-sm text-slate-500 space-y-2">
-                  <div className="flex items-center justify-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Rapport PDF professionnel personnalisé</span>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                  <div className="flex items-center gap-3 glass-card p-4 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                    <span className="text-sm text-slate-300">Rapport PDF professionnel</span>
                   </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Prédictions IA pour 2025-2027</span>
+                  <div className="flex items-center gap-3 glass-card p-4 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                    <span className="text-sm text-slate-300">Prédictions IA 2025-2027</span>
                   </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Plan d'action stratégique détaillé</span>
+                  <div className="flex items-center gap-3 glass-card p-4 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                    <span className="text-sm text-slate-300">Plan d'action stratégique</span>
                   </div>
                 </div>
               </form>

@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Download, Mail, X, FileText, Eye, Sparkles, Clock } from "lucide-react";
@@ -21,7 +20,7 @@ const PdfViewer = ({ isOpen, onClose, pdfBlob, downloadUrl, userEmail, userName 
   const { toast } = useToast();
 
   // Créer URL de prévisualisation quand le PDF blob est disponible
-  useState(() => {
+  useEffect(() => {
     if (pdfBlob) {
       const previewUrl = URL.createObjectURL(pdfBlob);
       setPdfPreviewUrl(previewUrl);
