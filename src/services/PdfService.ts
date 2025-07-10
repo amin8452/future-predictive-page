@@ -17,7 +17,7 @@ interface PdfGenerationResponse {
   error?: string;
 }
 
-interface DeepseekResponse {
+interface AIResponse {
   choices: Array<{
     message: {
       content: string;
@@ -31,7 +31,7 @@ export class PdfService {
 
   private static async generateAIContent(formData: FormData): Promise<string> {
     try {
-      console.log('🤖 Génération du contenu IA avec Deepseek v3...');
+      console.log('🤖 Génération du contenu IA...');
       
       const prompt = `En tant qu'expert en stratégie d'entreprise, créez un portrait prédictif professionnel DÉTAILLÉ et PERSONNALISÉ pour :
 
@@ -99,11 +99,11 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ Erreur API Deepseek:', response.status, errorText);
-        throw new Error(`Erreur API Deepseek: ${response.status}`);
+        console.error('❌ Erreur API IA:', response.status, errorText);
+        throw new Error(`Erreur API IA: ${response.status}`);
       }
 
-      const result: DeepseekResponse = await response.json();
+      const result: AIResponse = await response.json();
       const aiContent = result.choices[0]?.message?.content;
       
       if (!aiContent) {
@@ -207,7 +207,7 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     pdf.setFontSize(10);
     pdf.setTextColor(148, 163, 184);
     pdf.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, pageWidth/2, 250, { align: 'center' });
-    pdf.text('Powered by Deepseek v3 AI', pageWidth/2, 260, { align: 'center' });
+    pdf.text('Powered by AI', pageWidth/2, 260, { align: 'center' });
     
     // Logo/Badge IA
     pdf.setFillColor(6, 182, 212);

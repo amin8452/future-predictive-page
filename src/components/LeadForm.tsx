@@ -50,7 +50,7 @@ const LeadForm = () => {
     }
 
     setIsGenerating(true);
-    setGenerationStep("🤖 Connexion à Deepseek v3...");
+    setGenerationStep("🤖 Connexion à l'IA avancée...");
 
     try {
       // Étape 1: Génération IA
@@ -64,13 +64,17 @@ const LeadForm = () => {
       
       const result = await PdfService.generatePdf(formData);
       
-      if (result.success && result.downloadUrl) {
+      if (result.success && result.downloadUrl && result.pdfBlob) {
         setGenerationStep("✅ Rapport généré avec succès !");
         
-        setPdfData({
+        // S'assurer que les données PDF sont correctement définies
+        const pdfDataToSet = {
           downloadUrl: result.downloadUrl,
           pdfBlob: result.pdfBlob
-        });
+        };
+        
+        console.log('PDF Data:', pdfDataToSet); // Debug log
+        setPdfData(pdfDataToSet);
         
         // Toast de succès
         toast({
@@ -78,10 +82,11 @@ const LeadForm = () => {
           description: result.message || "Votre rapport professionnel est prêt",
         });
         
-        // Ouvrir le viewer après un court délai
+        // Ouvrir le viewer immédiatement après succès
         setTimeout(() => {
+          console.log('Ouverture du PDF viewer...'); // Debug log
           setShowPdfViewer(true);
-        }, 500);
+        }, 100);
         
       } else {
         throw new Error(result.error || "Erreur lors de la génération");
@@ -100,6 +105,11 @@ const LeadForm = () => {
     }
   };
 
+  const handleClosePdfViewer = () => {
+    console.log('Fermeture du PDF viewer...'); // Debug log
+    setShowPdfViewer(false);
+  };
+
   return (
     <>
       <section className="py-20 px-4 section-background">
@@ -107,7 +117,7 @@ const LeadForm = () => {
           <div className="text-center mb-12 animate-fade-in">
             <div className="inline-flex items-center gap-2 glass-card text-white px-6 py-3 rounded-full text-sm font-semibold mb-8">
               <Sparkles className="w-4 h-4 text-cyan-400" />
-              Powered by Deepseek v3
+              Powered by AI
             </div>
             <h2 className="text-5xl font-bold gradient-text-primary mb-6">
               Générez Votre Portrait Prédictif IA
@@ -267,11 +277,11 @@ const LeadForm = () => {
         </div>
       </section>
 
-      {/* PDF Viewer Modal */}
+      {/* PDF Viewer Modal - Amélioré pour le debug */}
       {pdfData && (
         <PdfViewer
           isOpen={showPdfViewer}
-          onClose={() => setShowPdfViewer(false)}
+          onClose={handleClosePdfViewer}
           pdfBlob={pdfData.pdfBlob}
           downloadUrl={pdfData.downloadUrl}
           userEmail={formData.email}

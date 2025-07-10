@@ -22,14 +22,21 @@ const PdfViewer = ({ isOpen, onClose, pdfBlob, downloadUrl, userEmail, userName 
 
   // Créer URL de prévisualisation quand le PDF blob est disponible
   useEffect(() => {
+    console.log('PdfViewer - pdfBlob:', pdfBlob); // Debug log
     if (pdfBlob) {
       const previewUrl = URL.createObjectURL(pdfBlob);
+      console.log('PdfViewer - previewUrl créée:', previewUrl); // Debug log
       setPdfPreviewUrl(previewUrl);
-      return () => URL.revokeObjectURL(previewUrl);
+      return () => {
+        console.log('PdfViewer - nettoyage URL'); // Debug log
+        URL.revokeObjectURL(previewUrl);
+      };
     }
   }, [pdfBlob]);
 
   const handleDownload = () => {
+    console.log('Tentative de téléchargement - pdfBlob:', pdfBlob); // Debug log
+    
     if (!pdfBlob) {
       toast({
         title: "❌ Erreur",
@@ -43,7 +50,7 @@ const PdfViewer = ({ isOpen, onClose, pdfBlob, downloadUrl, userEmail, userName 
       const url = URL.createObjectURL(pdfBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Portrait-Predictif-${userName.replace(/\s+/g, '-')}-${Date.now()}.pdf`;
+      link.download = `Portrait-Predictif-IA-${userName.replace(/\s+/g, '-')}-${Date.now()}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -54,6 +61,7 @@ const PdfViewer = ({ isOpen, onClose, pdfBlob, downloadUrl, userEmail, userName 
         description: "Votre Portrait Prédictif IA a été téléchargé avec succès",
       });
     } catch (error) {
+      console.error('Erreur téléchargement:', error); // Debug log
       toast({
         title: "❌ Erreur de téléchargement",
         description: "Impossible de télécharger le PDF",
@@ -80,7 +88,7 @@ Ce rapport contient :
 ✅ Recommandations personnalisées
 ✅ Plan d'action concret
 
-Généré par Deepseek v3 - Intelligence Artificielle de pointe
+Généré par Intelligence Artificielle de pointe
 
 Cordialement,
 L'équipe AI Portrait Pro`,
@@ -115,6 +123,8 @@ L'équipe AI Portrait Pro`,
       reader.readAsDataURL(blob);
     });
   };
+
+  console.log('PdfViewer render - isOpen:', isOpen, 'pdfPreviewUrl:', pdfPreviewUrl); // Debug log
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -154,7 +164,7 @@ L'équipe AI Portrait Pro`,
             </div>
             <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
               <Zap className="w-4 h-4 text-green-300" />
-              <span className="text-sm text-cyan-100">Deepseek v3</span>
+              <span className="text-sm text-cyan-100">AI v3</span>
             </div>
             <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
               <Award className="w-4 h-4 text-purple-300" />
@@ -255,7 +265,7 @@ L'équipe AI Portrait Pro`,
                 <Sparkles className="w-5 h-5" />
               </div>
               <p className="text-slate-400 text-sm">
-                Powered by Deepseek v3 • Intelligence Artificielle de Nouvelle Génération
+                Powered by AI • Intelligence Artificielle de Nouvelle Génération
               </p>
             </div>
           </div>
