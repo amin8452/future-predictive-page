@@ -163,7 +163,7 @@ L'équipe AI Portrait Pro`,
             </div>
             <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
               <Zap className="w-4 h-4 text-green-300" />
-              <span className="text-sm text-cyan-100">IA v3</span>
+              <span className="text-sm text-cyan-100">IA Nouvelle Génération</span>
             </div>
             <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
               <Award className="w-4 h-4 text-purple-300" />

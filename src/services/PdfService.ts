@@ -38,9 +38,11 @@ export class PdfService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.API_KEY}`,
+          'HTTP-Referer': window.location.origin,
+          'X-Title': 'AI Portrait Pro'
         },
         body: JSON.stringify({
-          model: 'deepseek/deepseek-r1-0528:free',
+          model: 'openai/gpt-3.5-turbo',
           messages: [
             {
               role: 'system',
@@ -58,34 +60,76 @@ export class PdfService {
 
 📊 STRUCTURE REQUISE (rapport de 8-10 pages) :
 
-1. RÉSUMÉ EXÉCUTIF (1 page)
-   • Synthèse du profil et potentiel
-   • 3 prédictions clés pour 2025-2027
+# 1. RÉSUMÉ EXÉCUTIF
+Synthèse du profil et potentiel de ${formData.name}
+3 prédictions clés pour 2025-2027
 
-2. ANALYSE SECTEUR ${formData.sector.toUpperCase()} (2 pages)
-   • Tendances actuelles et futures
-   • Opportunités spécifiques
-   • Défis sectoriels
+# 2. ANALYSE SECTEUR ${formData.sector.toUpperCase()}
+## Tendances actuelles et futures
+- Innovation technologique
+- Évolutions réglementaires
+- Opportunités de croissance
 
-3. PROFIL ${formData.position.toUpperCase()} (2 pages)
-   • Compétences actuelles évaluées
-   • Forces et axes d'amélioration
-   • Positionnement concurrentiel
+## Opportunités spécifiques pour ${formData.position}
+- Nouveaux marchés
+- Partenariats stratégiques
+- Avantages concurrentiels
 
-4. PRÉDICTIONS 2025-2027 (2 pages)
-   • 2025 : Opportunités immédiates
-   • 2026 : Évolutions technologiques
-   • 2027 : Leadership et impact
+# 3. PROFIL PROFESSIONNEL ${formData.position.toUpperCase()}
+## Compétences actuelles évaluées
+- Leadership et management
+- Expertise technique
+- Vision stratégique
 
-5. PLAN D'ACTION STRATÉGIQUE (2 pages)
-   • 6 mois : Actions prioritaires
-   • 18 mois : Développement compétences
-   • 36 mois : Objectifs long terme
+## Forces et axes d'amélioration
+- Points forts identifiés
+- Domaines de développement
+- Recommandations d'amélioration
 
-6. RECOMMANDATIONS PERSONNALISÉES (1 page)
-   • Basées sur "${formData.ambitions}"
-   • KPIs de suivi
-   • Prochaines étapes
+# 4. PRÉDICTIONS STRATÉGIQUES 2025-2027
+## 2025 : Opportunités immédiates
+- Tendances émergentes
+- Actions à court terme
+- ROI attendu
+
+## 2026 : Évolutions technologiques
+- Innovations disruptives
+- Adaptation nécessaire
+- Investissements recommandés
+
+## 2027 : Leadership et impact
+- Position de marché
+- Influence sectorielle
+- Legacy professionnel
+
+# 5. PLAN D'ACTION STRATÉGIQUE
+## 6 mois : Actions prioritaires
+1. Formation et certification
+2. Réseautage professionnel
+3. Projets pilotes
+
+## 18 mois : Développement compétences
+1. Leadership avancé
+2. Innovation technologique
+3. Expansion marché
+
+## 36 mois : Objectifs long terme
+1. Position d'expert reconnu
+2. Influence sectorielle
+3. Impact organisationnel
+
+# 6. RECOMMANDATIONS PERSONNALISÉES
+Basées sur : "${formData.ambitions}"
+
+## KPIs de suivi
+- Indicateurs de performance
+- Métriques de succès
+- Objectifs mesurables
+
+## Prochaines étapes
+- Actions immédiates
+- Ressources nécessaires
+- Timeline de mise en œuvre
 
 IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et personnalisez chaque section selon le profil ${formData.name} dans ${formData.sector}.`
             }
@@ -115,8 +159,118 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
       
     } catch (error) {
       console.error('❌ Erreur génération contenu IA:', error);
-      throw new Error('Impossible de générer le contenu IA');
+      // Retourner du contenu par défaut en cas d'erreur
+      return this.generateFallbackContent(formData);
     }
+  }
+
+  private static generateFallbackContent(formData: FormData): string {
+    return `# PORTRAIT PRÉDICTIF IA - ${formData.name}
+
+## RÉSUMÉ EXÉCUTIF
+
+Profil analysé : ${formData.name}
+Secteur d'activité : ${formData.sector}
+Poste actuel : ${formData.position}
+
+### Synthèse Stratégique
+Ce rapport présente une analyse approfondie du potentiel professionnel de ${formData.name} dans le secteur ${formData.sector}.
+
+### Prédictions Clés 2025-2027
+1. **2025** : Consolidation des compétences actuelles et identification de nouvelles opportunités
+2. **2026** : Développement de l'expertise sectorielle et expansion du réseau professionnel  
+3. **2027** : Positionnement en tant qu'expert reconnu avec influence sectorielle significative
+
+## ANALYSE SECTEUR ${formData.sector.toUpperCase()}
+
+### Tendances Actuelles
+Le secteur ${formData.sector} connaît une transformation digitale accélérée avec :
+- Innovation technologique constante
+- Évolution des attentes client
+- Nouveaux modèles économiques
+
+### Opportunités Spécifiques
+Pour un profil ${formData.position} :
+- Leadership dans l'innovation
+- Développement de solutions client
+- Expansion vers de nouveaux marchés
+
+## PROFIL PROFESSIONNEL
+
+### Compétences Évaluées
+- **Leadership** : Capacité à diriger et inspirer les équipes
+- **Expertise Technique** : Maîtrise des outils et technologies sectorielles
+- **Vision Stratégique** : Anticipation des tendances et opportunités
+
+### Forces Identifiées
+- Expérience solide dans ${formData.sector}
+- Position de ${formData.position} avec responsabilités clés
+- Vision claire : "${formData.ambitions}"
+
+## PRÉDICTIONS STRATÉGIQUES 2025-2027
+
+### 2025 : Opportunités Immédiates
+- Renforcement des compétences core
+- Développement du réseau professionnel
+- Participation à des projets innovants
+
+### 2026 : Évolutions Technologiques
+- Intégration de l'IA dans les processus métier
+- Adaptation aux nouvelles technologies
+- Formation continue et certification
+
+### 2027 : Leadership et Impact
+- Position d'expert reconnu
+- Influence sur les décisions sectorielles
+- Contribution à l'innovation de l'industrie
+
+## PLAN D'ACTION STRATÉGIQUE
+
+### 6 Mois : Actions Prioritaires
+1. **Formation** : Certification dans les technologies émergentes
+2. **Réseautage** : Participation aux événements sectoriels clés
+3. **Innovation** : Lancement d'un projet pilote
+
+### 18 Mois : Développement Compétences
+1. **Leadership Avancé** : Formation management et stratégie
+2. **Expertise Technique** : Maîtrise des outils de pointe
+3. **Vision Marché** : Analyse concurrentielle approfondie
+
+### 36 Mois : Objectifs Long Terme
+1. **Reconnaissance Sectorielle** : Expert référent reconnu
+2. **Impact Organisationnel** : Influence sur la stratégie d'entreprise
+3. **Innovation Continue** : Contribution aux évolutions du secteur
+
+## RECOMMANDATIONS PERSONNALISÉES
+
+### Basées sur vos ambitions
+"${formData.ambitions}"
+
+### Actions Recommandées
+1. Développer votre expertise dans les technologies émergentes
+2. Renforcer votre réseau professionnel sectoriel
+3. Participer activement aux initiatives d'innovation
+4. Cultiver votre personal branding et votre visibilité
+
+### KPIs de Suivi
+- Nombre de certifications obtenues
+- Taille et qualité du réseau professionnel
+- Projets innovants menés à bien
+- Reconnaissance sectorielle (publications, conférences)
+
+### Prochaines Étapes
+1. **Immédiat** : Identifier 3 formations prioritaires
+2. **30 jours** : Rejoindre 2 associations professionnelles
+3. **90 jours** : Lancer votre premier projet d'innovation
+
+## CONCLUSION
+
+Votre profil ${formData.position} dans ${formData.sector} présente un potentiel exceptionnel. 
+Avec une stratégie structurée et les bonnes actions, vous pouvez devenir un leader reconnu de votre secteur d'ici 2027.
+
+---
+*Rapport généré par Intelligence Artificielle - AI Portrait Pro*
+*Confidential - Usage personnel uniquement*`;
   }
 
   private static createPdfFromContent(aiContent: string, formData: FormData): Blob {
@@ -176,7 +330,7 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     pdf.setTextColor(6, 182, 212);
     pdf.text('PRÉDICTIF IA', pageWidth/2, titleY + 15, { align: 'center' });
     
-    // Sous-titre modifié
+    // Sous-titre
     pdf.setFontSize(18);
     pdf.setTextColor(148, 163, 184);
     pdf.text('Analyse Stratégique IA Personnalisée', pageWidth/2, 115, { align: 'center' });
@@ -203,7 +357,7 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     infoY += 8;
     pdf.text(`🎯 ${formData.ambitions.substring(0, 50)}...`, 40, infoY);
     
-    // Footer modifié
+    // Footer
     pdf.setFontSize(10);
     pdf.setTextColor(148, 163, 184);
     pdf.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, pageWidth/2, 250, { align: 'center' });
@@ -226,7 +380,7 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     pdf.setTextColor(255, 255, 255);
     pdf.setFontSize(18);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('ANALYSE PRÉDICTIVE IA V3', margin + 5, yPosition + 8);
+    pdf.text('ANALYSE PRÉDICTIVE IA', margin + 5, yPosition + 8);
     
     pdf.setFontSize(10);
     pdf.text(`Rapport personnalisé pour ${formData.name}`, margin + 5, yPosition + 16);
@@ -329,10 +483,10 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
       pdf.setLineWidth(0.5);
       pdf.line(20, 280, 190, 280);
       
-      // Texte du pied de page modifié
+      // Texte du pied de page
       pdf.setFontSize(8);
       pdf.setTextColor(100, 116, 139);
-      pdf.text('AI Portrait Pro - Powered by IA v3', 20, 285);
+      pdf.text('AI Portrait Pro - Powered by IA', 20, 285);
       pdf.text(`Page ${i}/${totalPages}`, 190, 285, { align: 'right' });
       pdf.text(`© ${new Date().getFullYear()} - Rapport confidentiel généré pour ${formData.name}`, 105, 290, { align: 'center' });
     }

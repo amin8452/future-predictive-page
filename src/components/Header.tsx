@@ -17,25 +17,34 @@ const Header = () => {
   ];
 
   const scrollToSection = (href: string) => {
-    console.log('Scroll vers:', href); // Debug
-    const element = document.querySelector(href);
-    console.log('Élément trouvé:', element); // Debug
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    } else {
-      // Fallback: essayer de trouver par ID sans #
-      const fallbackElement = document.getElementById(href.replace('#', ''));
-      if (fallbackElement) {
-        fallbackElement.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    }
+    console.log('Scroll vers:', href);
     setIsOpen(false);
+    
+    // Attendre que le menu se ferme avant de faire le scroll
+    setTimeout(() => {
+      const targetId = href.replace('#', '');
+      let element = document.getElementById(targetId);
+      
+      // Si l'élément n'est pas trouvé par ID, essayer avec querySelector
+      if (!element) {
+        element = document.querySelector(href);
+      }
+      
+      console.log('Élément trouvé:', element);
+      
+      if (element) {
+        const headerHeight = 80; // Height of fixed header
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        console.warn(`Section ${href} non trouvée`);
+      }
+    }, 100);
   };
 
   return (
@@ -58,10 +67,7 @@ const Header = () => {
             {navItems.map((item) => (
               <button
                 key={item.name}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.href);
-                }}
+                onClick={() => scrollToSection(item.href)}
                 className="text-slate-300 hover:text-white transition-colors duration-300 text-sm font-medium hover:scale-105 transform"
               >
                 {item.name}
@@ -72,10 +78,7 @@ const Header = () => {
           {/* CTA Button */}
           <div className="hidden md:flex">
             <Button
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('#lead-form');
-              }}
+              onClick={() => scrollToSection('#lead-form')}
               className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
             >
               <Sparkles className="w-4 h-4 mr-2" />
@@ -99,10 +102,7 @@ const Header = () => {
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.href);
-                  }}
+                  onClick={() => scrollToSection(item.href)}
                   className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-300 rounded-lg mx-2"
                 >
                   {item.name}
@@ -110,10 +110,7 @@ const Header = () => {
               ))}
               <div className="px-4 pt-2">
                 <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection('#lead-form');
-                  }}
+                  onClick={() => scrollToSection('#lead-form')}
                   className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white py-2 rounded-lg font-semibold transform hover:scale-105 transition-all"
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
