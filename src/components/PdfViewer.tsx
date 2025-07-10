@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -164,7 +163,7 @@ L'équipe AI Portrait Pro`,
             </div>
             <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
               <Zap className="w-4 h-4 text-green-300" />
-              <span className="text-sm text-cyan-100">AI v3</span>
+              <span className="text-sm text-cyan-100">IA v3</span>
             </div>
             <div className="flex items-center space-x-2 glass-card px-4 py-2 rounded-xl">
               <Award className="w-4 h-4 text-purple-300" />
@@ -265,7 +264,7 @@ L'équipe AI Portrait Pro`,
                 <Sparkles className="w-5 h-5" />
               </div>
               <p className="text-slate-400 text-sm">
-                Powered by AI • Intelligence Artificielle de Nouvelle Génération
+                Powered by IA • Intelligence Artificielle de Nouvelle Génération
               </p>
             </div>
           </div>

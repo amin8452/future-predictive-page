@@ -27,13 +27,28 @@ interface AIResponse {
 
 export class PdfService {
   private static API_BASE_URL = 'https://openrouter.ai/api/v1';
-  private static API_KEY = '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';
+  private static API_KEY = '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';
 
   private static async generateAIContent(formData: FormData): Promise<string> {
     try {
       console.log('🤖 Génération du contenu IA...');
       
-      const prompt = `En tant qu'expert en stratégie d'entreprise, créez un portrait prédictif professionnel DÉTAILLÉ et PERSONNALISÉ pour :
+      const response = await fetch(`${this.API_BASE_URL}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'deepseek/deepseek-r1-0528:free',
+          messages: [
+            {
+              role: 'system',
+              content: 'Vous êtes un consultant senior expert en stratégie d\'entreprise. Rédigez des rapports professionnels détaillés avec des données concrètes et des recommandations actionables.'
+            },
+            {
+              role: 'user',
+              content: `En tant qu'expert en stratégie d'entreprise, créez un portrait prédictif professionnel DÉTAILLÉ et PERSONNALISÉ pour :
 
 📋 PROFIL CLIENT :
 • Nom : ${formData.name}
@@ -72,24 +87,7 @@ export class PdfService {
    • KPIs de suivi
    • Prochaines étapes
 
-IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et personnalisez chaque section selon le profil ${formData.name} dans ${formData.sector}.`;
-
-      const response = await fetch(`${this.API_BASE_URL}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'deepseek/deepseek-r1-0528:free',
-          messages: [
-            {
-              role: 'system',
-              content: 'Vous êtes un consultant senior expert en stratégie d\'entreprise. Rédigez des rapports professionnels détaillés avec des données concrètes et des recommandations actionables.'
-            },
-            {
-              role: 'user',
-              content: prompt
+IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et personnalisez chaque section selon le profil ${formData.name} dans ${formData.sector}.`
             }
           ],
           max_tokens: 3000,
@@ -97,10 +95,12 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
         }),
       });
 
+      console.log('Response status:', response.status);
+      
       if (!response.ok) {
         const errorText = await response.text();
         console.error('❌ Erreur API IA:', response.status, errorText);
-        throw new Error(`Erreur API IA: ${response.status}`);
+        throw new Error(`Erreur API IA: ${response.status} - ${errorText}`);
       }
 
       const result: AIResponse = await response.json();
@@ -176,10 +176,10 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     pdf.setTextColor(6, 182, 212);
     pdf.text('PRÉDICTIF IA', pageWidth/2, titleY + 15, { align: 'center' });
     
-    // Sous-titre
+    // Sous-titre modifié
     pdf.setFontSize(18);
-    pdf.setTextColor(148, 163, 184); // slate-400
-    pdf.text('Analyse Stratégique Personnalisée', pageWidth/2, titleY + 35, { align: 'center' });
+    pdf.setTextColor(148, 163, 184);
+    pdf.text('Analyse Stratégique IA Personnalisée', pageWidth/2, 115, { align: 'center' });
     
     // Informations client dans un cadre moderne
     const boxY = 140;
@@ -203,11 +203,11 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     infoY += 8;
     pdf.text(`🎯 ${formData.ambitions.substring(0, 50)}...`, 40, infoY);
     
-    // Date et technologie
+    // Footer modifié
     pdf.setFontSize(10);
     pdf.setTextColor(148, 163, 184);
     pdf.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, pageWidth/2, 250, { align: 'center' });
-    pdf.text('Powered by AI', pageWidth/2, 260, { align: 'center' });
+    pdf.text('Powered by IA', pageWidth/2, 260, { align: 'center' });
     
     // Logo/Badge IA
     pdf.setFillColor(6, 182, 212);
@@ -226,7 +226,7 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     pdf.setTextColor(255, 255, 255);
     pdf.setFontSize(18);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('ANALYSE PRÉDICTIVE DEEPSEEK V3', margin + 5, yPosition + 8);
+    pdf.text('ANALYSE PRÉDICTIVE IA V3', margin + 5, yPosition + 8);
     
     pdf.setFontSize(10);
     pdf.text(`Rapport personnalisé pour ${formData.name}`, margin + 5, yPosition + 16);
@@ -329,10 +329,10 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
       pdf.setLineWidth(0.5);
       pdf.line(20, 280, 190, 280);
       
-      // Texte du pied de page
+      // Texte du pied de page modifié
       pdf.setFontSize(8);
-      pdf.setTextColor(100, 116, 139); // slate-500
-      pdf.text('AI Portrait Pro - Powered by Deepseek v3', 20, 285);
+      pdf.setTextColor(100, 116, 139);
+      pdf.text('AI Portrait Pro - Powered by IA v3', 20, 285);
       pdf.text(`Page ${i}/${totalPages}`, 190, 285, { align: 'right' });
       pdf.text(`© ${new Date().getFullYear()} - Rapport confidentiel généré pour ${formData.name}`, 105, 290, { align: 'center' });
     }
@@ -342,7 +342,7 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
     try {
       console.log('🚀 Démarrage génération PDF IA...');
       
-      // Étape 1: Génération contenu IA (optimisé)
+      // Étape 1: Génération contenu IA
       const aiContent = await this.generateAIContent(formData);
       
       // Étape 2: Création PDF professionnel

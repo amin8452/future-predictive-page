@@ -17,9 +17,23 @@ const Header = () => {
   ];
 
   const scrollToSection = (href: string) => {
+    console.log('Scroll vers:', href); // Debug
     const element = document.querySelector(href);
+    console.log('Élément trouvé:', element); // Debug
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    } else {
+      // Fallback: essayer de trouver par ID sans #
+      const fallbackElement = document.getElementById(href.replace('#', ''));
+      if (fallbackElement) {
+        fallbackElement.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     }
     setIsOpen(false);
   };
@@ -29,7 +43,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => scrollToSection('#hero')}>
             <div className="p-2 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg">
               <Bot className="w-6 h-6 text-white" />
             </div>
@@ -44,8 +58,11 @@ const Header = () => {
             {navItems.map((item) => (
               <button
                 key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="text-slate-300 hover:text-white transition-colors duration-300 text-sm font-medium"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.href);
+                }}
+                className="text-slate-300 hover:text-white transition-colors duration-300 text-sm font-medium hover:scale-105 transform"
               >
                 {item.name}
               </button>
@@ -55,7 +72,10 @@ const Header = () => {
           {/* CTA Button */}
           <div className="hidden md:flex">
             <Button
-              onClick={() => scrollToSection('#lead-form')}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('#lead-form');
+              }}
               className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
             >
               <Sparkles className="w-4 h-4 mr-2" />
@@ -65,7 +85,7 @@ const Header = () => {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden text-white"
+            className="md:hidden text-white hover:text-cyan-400 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -74,21 +94,27 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10">
+          <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10 animate-fade-in">
             <nav className="py-4 space-y-3">
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-300"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(item.href);
+                  }}
+                  className="block w-full text-left px-4 py-2 text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-300 rounded-lg mx-2"
                 >
                   {item.name}
                 </button>
               ))}
               <div className="px-4 pt-2">
                 <Button
-                  onClick={() => scrollToSection('#lead-form')}
-                  className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white py-2 rounded-lg font-semibold"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection('#lead-form');
+                  }}
+                  className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white py-2 rounded-lg font-semibold transform hover:scale-105 transition-all"
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
                   Générer mon PDF
