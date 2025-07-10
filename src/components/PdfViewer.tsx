@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -21,20 +22,20 @@ const PdfViewer = ({ isOpen, onClose, pdfBlob, downloadUrl, userEmail, userName 
 
   // Créer URL de prévisualisation quand le PDF blob est disponible
   useEffect(() => {
-    console.log('PdfViewer - pdfBlob:', pdfBlob); // Debug log
+    console.log('📄 PdfViewer - pdfBlob:', pdfBlob);
     if (pdfBlob) {
       const previewUrl = URL.createObjectURL(pdfBlob);
-      console.log('PdfViewer - previewUrl créée:', previewUrl); // Debug log
+      console.log('🔗 PdfViewer - previewUrl créée:', previewUrl);
       setPdfPreviewUrl(previewUrl);
       return () => {
-        console.log('PdfViewer - nettoyage URL'); // Debug log
+        console.log('🧹 PdfViewer - nettoyage URL');
         URL.revokeObjectURL(previewUrl);
       };
     }
   }, [pdfBlob]);
 
   const handleDownload = () => {
-    console.log('Tentative de téléchargement - pdfBlob:', pdfBlob); // Debug log
+    console.log('💾 Tentative de téléchargement - pdfBlob:', pdfBlob);
     
     if (!pdfBlob) {
       toast({
@@ -60,7 +61,7 @@ const PdfViewer = ({ isOpen, onClose, pdfBlob, downloadUrl, userEmail, userName 
         description: "Votre Portrait Prédictif IA a été téléchargé avec succès",
       });
     } catch (error) {
-      console.error('Erreur téléchargement:', error); // Debug log
+      console.error('❌ Erreur téléchargement:', error);
       toast({
         title: "❌ Erreur de téléchargement",
         description: "Impossible de télécharger le PDF",
@@ -123,7 +124,7 @@ L'équipe AI Portrait Pro`,
     });
   };
 
-  console.log('PdfViewer render - isOpen:', isOpen, 'pdfPreviewUrl:', pdfPreviewUrl); // Debug log
+  console.log('🎬 PdfViewer render - isOpen:', isOpen, 'pdfPreviewUrl:', pdfPreviewUrl);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

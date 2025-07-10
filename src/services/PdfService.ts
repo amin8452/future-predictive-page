@@ -46,11 +46,11 @@ export class PdfService {
           messages: [
             {
               role: 'system',
-              content: 'Vous êtes un consultant senior expert en stratégie d\'entreprise. Rédigez des rapports professionnels détaillés avec des données concrètes et des recommandations actionables.'
+              content: 'Vous êtes un consultant senior expert en stratégie d\'entreprise utilisant l\'Intelligence Artificielle. Rédigez des rapports professionnels détaillés avec des données concrètes et des recommandations actionables.'
             },
             {
               role: 'user',
-              content: `En tant qu'expert en stratégie d'entreprise, créez un portrait prédictif professionnel DÉTAILLÉ et PERSONNALISÉ pour :
+              content: `En tant qu'expert en stratégie d'entreprise utilisant l'IA, créez un portrait prédictif professionnel DÉTAILLÉ et PERSONNALISÉ pour :
 
 📋 PROFIL CLIENT :
 • Nom : ${formData.name}
@@ -62,10 +62,10 @@ export class PdfService {
 
 # 1. RÉSUMÉ EXÉCUTIF
 Synthèse du profil et potentiel de ${formData.name}
-3 prédictions clés pour 2025-2027
+3 prédictions clés pour 2025-2027 par Intelligence Artificielle
 
 # 2. ANALYSE SECTEUR ${formData.sector.toUpperCase()}
-## Tendances actuelles et futures
+## Tendances actuelles et futures (Analyse IA)
 - Innovation technologique
 - Évolutions réglementaires
 - Opportunités de croissance
@@ -76,7 +76,7 @@ Synthèse du profil et potentiel de ${formData.name}
 - Avantages concurrentiels
 
 # 3. PROFIL PROFESSIONNEL ${formData.position.toUpperCase()}
-## Compétences actuelles évaluées
+## Compétences actuelles évaluées par IA
 - Leadership et management
 - Expertise technique
 - Vision stratégique
@@ -86,7 +86,7 @@ Synthèse du profil et potentiel de ${formData.name}
 - Domaines de développement
 - Recommandations d'amélioration
 
-# 4. PRÉDICTIONS STRATÉGIQUES 2025-2027
+# 4. PRÉDICTIONS STRATÉGIQUES 2025-2027 (IA)
 ## 2025 : Opportunités immédiates
 - Tendances émergentes
 - Actions à court terme
@@ -118,7 +118,7 @@ Synthèse du profil et potentiel de ${formData.name}
 2. Influence sectorielle
 3. Impact organisationnel
 
-# 6. RECOMMANDATIONS PERSONNALISÉES
+# 6. RECOMMANDATIONS PERSONNALISÉES IA
 Basées sur : "${formData.ambitions}"
 
 ## KPIs de suivi
@@ -169,21 +169,21 @@ IMPORTANT : Utilisez des données concrètes, des chiffres du marché, et person
 
 ## RÉSUMÉ EXÉCUTIF
 
-Profil analysé : ${formData.name}
+Profil analysé par Intelligence Artificielle : ${formData.name}
 Secteur d'activité : ${formData.sector}
 Poste actuel : ${formData.position}
 
-### Synthèse Stratégique
-Ce rapport présente une analyse approfondie du potentiel professionnel de ${formData.name} dans le secteur ${formData.sector}.
+### Synthèse Stratégique IA
+Ce rapport présente une analyse approfondie du potentiel professionnel de ${formData.name} dans le secteur ${formData.sector}, générée par Intelligence Artificielle avancée.
 
-### Prédictions Clés 2025-2027
+### Prédictions Clés 2025-2027 (Intelligence Artificielle)
 1. **2025** : Consolidation des compétences actuelles et identification de nouvelles opportunités
 2. **2026** : Développement de l'expertise sectorielle et expansion du réseau professionnel  
 3. **2027** : Positionnement en tant qu'expert reconnu avec influence sectorielle significative
 
 ## ANALYSE SECTEUR ${formData.sector.toUpperCase()}
 
-### Tendances Actuelles
+### Tendances Actuelles (Analyse IA)
 Le secteur ${formData.sector} connaît une transformation digitale accélérée avec :
 - Innovation technologique constante
 - Évolution des attentes client
@@ -197,7 +197,7 @@ Pour un profil ${formData.position} :
 
 ## PROFIL PROFESSIONNEL
 
-### Compétences Évaluées
+### Compétences Évaluées par IA
 - **Leadership** : Capacité à diriger et inspirer les équipes
 - **Expertise Technique** : Maîtrise des outils et technologies sectorielles
 - **Vision Stratégique** : Anticipation des tendances et opportunités
@@ -207,7 +207,7 @@ Pour un profil ${formData.position} :
 - Position de ${formData.position} avec responsabilités clés
 - Vision claire : "${formData.ambitions}"
 
-## PRÉDICTIONS STRATÉGIQUES 2025-2027
+## PRÉDICTIONS STRATÉGIQUES 2025-2027 (IA)
 
 ### 2025 : Opportunités Immédiates
 - Renforcement des compétences core
@@ -241,12 +241,12 @@ Pour un profil ${formData.position} :
 2. **Impact Organisationnel** : Influence sur la stratégie d'entreprise
 3. **Innovation Continue** : Contribution aux évolutions du secteur
 
-## RECOMMANDATIONS PERSONNALISÉES
+## RECOMMANDATIONS PERSONNALISÉES IA
 
 ### Basées sur vos ambitions
 "${formData.ambitions}"
 
-### Actions Recommandées
+### Actions Recommandées par IA
 1. Développer votre expertise dans les technologies émergentes
 2. Renforcer votre réseau professionnel sectoriel
 3. Participer activement aux initiatives d'innovation
@@ -265,7 +265,7 @@ Pour un profil ${formData.position} :
 
 ## CONCLUSION
 
-Votre profil ${formData.position} dans ${formData.sector} présente un potentiel exceptionnel. 
+Votre profil ${formData.position} dans ${formData.sector} présente un potentiel exceptionnel selon notre analyse par Intelligence Artificielle. 
 Avec une stratégie structurée et les bonnes actions, vous pouvez devenir un leader reconnu de votre secteur d'ici 2027.
 
 ---

@@ -73,7 +73,7 @@ const LeadForm = () => {
           pdfBlob: result.pdfBlob
         };
         
-        console.log('PDF Data:', pdfDataToSet); // Debug log
+        console.log('✅ PDF Data set:', pdfDataToSet);
         setPdfData(pdfDataToSet);
         
         // Toast de succès
@@ -82,18 +82,18 @@ const LeadForm = () => {
           description: result.message || "Votre rapport professionnel est prêt",
         });
         
-        // Ouvrir le viewer immédiatement après succès
+        // Ouvrir le viewer automatiquement après succès
+        console.log('🎬 Ouverture automatique du PDF viewer...');
         setTimeout(() => {
-          console.log('Ouverture du PDF viewer...'); // Debug log
           setShowPdfViewer(true);
-        }, 100);
+        }, 500);
         
       } else {
         throw new Error(result.error || "Erreur lors de la génération");
       }
       
     } catch (error) {
-      console.error("Erreur génération:", error);
+      console.error("❌ Erreur génération:", error);
       toast({
         title: "❌ Erreur de génération",
         description: "Impossible de générer le rapport. Veuillez réessayer.",
@@ -106,18 +106,18 @@ const LeadForm = () => {
   };
 
   const handleClosePdfViewer = () => {
-    console.log('Fermeture du PDF viewer...'); // Debug log
+    console.log('❌ Fermeture du PDF viewer...');
     setShowPdfViewer(false);
   };
 
   return (
     <>
-      <section className="py-20 px-4 section-background">
+      <section id="lead-form" className="py-20 px-4 section-background">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12 animate-fade-in">
             <div className="inline-flex items-center gap-2 glass-card text-white px-6 py-3 rounded-full text-sm font-semibold mb-8">
               <Sparkles className="w-4 h-4 text-cyan-400" />
-              Powered by AI
+              Powered by IA
             </div>
             <h2 className="text-5xl font-bold gradient-text-primary mb-6">
               Générez Votre Portrait Prédictif IA
@@ -277,7 +277,7 @@ const LeadForm = () => {
         </div>
       </section>
 
-      {/* PDF Viewer Modal - Amélioré pour le debug */}
+      {/* PDF Viewer Modal */}
       {pdfData && (
         <PdfViewer
           isOpen={showPdfViewer}

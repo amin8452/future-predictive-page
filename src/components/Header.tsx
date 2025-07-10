@@ -17,34 +17,63 @@ const Header = () => {
   ];
 
   const scrollToSection = (href: string) => {
-    console.log('Scroll vers:', href);
+    console.log('🔄 Navigation vers:', href);
     setIsOpen(false);
     
     // Attendre que le menu se ferme avant de faire le scroll
     setTimeout(() => {
       const targetId = href.replace('#', '');
+      console.log('🎯 Recherche de la section:', targetId);
+      
+      // Essayer différentes méthodes pour trouver l'élément
       let element = document.getElementById(targetId);
       
-      // Si l'élément n'est pas trouvé par ID, essayer avec querySelector
+      if (!element) {
+        element = document.querySelector(`[id="${targetId}"]`);
+      }
+      
       if (!element) {
         element = document.querySelector(href);
       }
       
-      console.log('Élément trouvé:', element);
+      // Essayer avec des sélecteurs plus spécifiques
+      if (!element) {
+        const possibleSelectors = [
+          `section[id="${targetId}"]`,
+          `div[id="${targetId}"]`,
+          `.${targetId}`,
+          `[data-section="${targetId}"]`
+        ];
+        
+        for (const selector of possibleSelectors) {
+          element = document.querySelector(selector);
+          if (element) break;
+        }
+      }
+      
+      console.log('📍 Élément trouvé:', element);
       
       if (element) {
-        const headerHeight = 80; // Height of fixed header
+        const headerHeight = 80;
         const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - headerHeight;
+        
+        console.log('📏 Position calculée:', offsetPosition);
         
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
         });
+        
+        console.log('✅ Scroll effectué vers:', targetId);
       } else {
-        console.warn(`Section ${href} non trouvée`);
+        console.warn('⚠️ Section non trouvée:', href);
+        // Fallback : scroll vers le haut si la section n'est pas trouvée
+        if (targetId === 'hero') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
-    }, 100);
+    }, 150);
   };
 
   return (
